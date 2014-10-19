@@ -11,18 +11,32 @@ app = Flask(__name__,
 app.debug = True
 
 
+def connect_to_database():
+    return MySQLdb.connect(host="localhost",
+                           user="root",
+                           passwd="password",
+                           db="test")
+
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = connect_to_database()
+    return db
+
+
 @app.route('/')
 def root():
-    db = MySQLdb.connect(host="localhost",
-                         user="root",
-                         passwd="password",
-                         db="test")
+    db = get_db()
     cur = db.cursor()
     cur.execute("SELECT * FROM sayings")
     sayings = list(cur.fetchall())
-    db.close()
     return sayings[randint(0, len(sayings) - 1)]
 
 
-
-#app.run(debug =True) #We'll turn off debug in production
+@app.teardown_appcontext
+def teardown_db(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
+        g._database = None
