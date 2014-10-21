@@ -1,4 +1,5 @@
 .idea
+.vagrant
 *.pyc
-
+venv
 sherrand.iml
