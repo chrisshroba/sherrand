@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Request a Ride{% endblock %}
+{% block content %}
+<div id="ride-content">
+    <div id="ride-instruction"> Please fill out the ride detail</div>
+    <table id="ride-detail">
+        <tr>
+            <td>
+                <input id="ride-date" class="inputs" type="date">
+            </td>
+            <td>
+                <input id="ride-start-time" class="inputs" type="time">
+            </td>
+            <td>
+                to
+            </td>
+            <td>
+                <input id="ride-end-time" class="inputs" type="time">
+            </td>
+        </tr>
+        <tr id="ride-origin">
+            <td colspan="4">
+                <input id="ride-title" class="inputs" type="text" placeholder="From">
+            </td>
+        </tr>
+        <tr id="ride-destination">
+            <td colspan="4">
+                <input id="ride-title" class="inputs" type="text" placeholder="To">
+            </td>
+        </tr>
+    </table>
+
+    <div id="button-group">
+        <a href="#" class="button blue">Search</a>
+    </div>
+</div>
+{% endblock %}
