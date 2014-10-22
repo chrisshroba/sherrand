@@ -1,5 +1,7 @@
 from flask import *
 from mysql import get_db, teardown_db
+from random import randint
+
 
 app = Flask(__name__,
             static_folder="../static",
@@ -19,28 +21,24 @@ def before_request():
             and request.endpoint != "static":
         print "uh oh"
         print request.endpoint
-        return redirect("/login.html")
+        return redirect("/login")
 
 
 @app.route('/')
 def root():
-    # db = MySQLdb.connect(host="localhost",
-    #                      user="root",
-    #                      passwd="",
-    #                      db="test")
-    # cur = db.cursor()
-    # cur.execute("SELECT * FROM sayings")
-    # sayings = list(cur.fetchall())
-    # db.close()
-    return "Hi, I'm root"
+    db = get_db()
+    cur = db.cursor()
+    cur.execute("SELECT * FROM sayings")
+    sayings = list(cur.fetchall())
+    return sayings[randint(0, len(sayings) - 1)]
 
 
 def lookup_user(username, password):
     db = get_db()
     cur = db.cursor()
-    q = "SELECT * FROM user WHERE username = '%s' AND pass = PASSWORD('%s') LIMIT 1" % (username, password)
+    q = "SELECT * FROM Users WHERE username = %s AND pass = PASSWORD(%s) LIMIT 1"
     print q
-    cur.execute(q)
+    cur.execute(q, (username, password))
     results = cur.fetchall()
     if len(results) == 0:
         return None
@@ -65,11 +63,16 @@ def login():
     if user:
         return redirect("/loginsuccess")
     else:
-        return redirect("/login.html")
+        return redirect("/login")
+
+@is_public
+@app.route("/login", methods=["GET"])
+def login_page():
+    return render_template("login.html")
 
 
 @app.route("/loginsuccess")
-def loginsuccess():
+def login_success():
     return "You have successful logged in."
 
 
@@ -81,7 +84,7 @@ def logout():
 
 @is_public
 @app.route("/createaccount", methods=["POST"])
-def createaccount():
+def create_account():
     print 1
     full_name = request.form.get("full_name")
     username = request.form.get("username")
@@ -92,16 +95,24 @@ def createaccount():
     db = get_db()
     cur = db.cursor()
     print 3
-    q = "INSERT INTO user (full_name, username, pass, phone, email) VALUES ('%s','%s',PASSWORD('%s'),'%s','%s')" %\
-        (full_name, username, passwd, phone, email)
+    q = """
+        INSERT INTO Users (full_name, username, pass, phone, email)
+        VALUES (%s, %s,PASSWORD(%s), %s, %s)
+        """
     print q
-    res = cur.execute(q)
-    db.commit(True)
+    res = cur.execute(q, (full_name, username, passwd, phone, email))
+    db.commit()
     print res
     session["user"] = username
     print "sesh user was set"
 
     return "Created Account."
+
+
+@is_public
+@app.route("/signup", methods=["GET"])
+def signup():
+    return render_template("signup.html")
 
 
 @app.teardown_appcontext
@@ -112,4 +123,3 @@ app.secret_key = '3be32335d4bCb0dCdE7BCACC5c41A8'
 
 #We'll turn off debug in production
 app.debug = True
-#app.run(host="0.0.0.0")
