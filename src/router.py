@@ -8,7 +8,7 @@ from flask_login import *
 
 
 app = Flask(__name__,
-            static_folder="../sherrand",
+            static_folder="../static",
             static_path="")
 
 public_routes=[]
