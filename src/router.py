@@ -4,7 +4,7 @@ from random import randint
 from mysql import get_db, teardown_db
 import random
 import MySQLdb
-from flask_login import *
+
 
 
 app = Flask(__name__,
@@ -18,7 +18,8 @@ def is_public(fn):
 
 @app.before_request
 def before_request():
-    if request.endpoint and not session.get("user", None) and app.view_functions[request.endpoint] not in public_routes and request.endpoint!="static":
+    if request.endpoint and not session.get("user", None) and app.view_functions[request.endpoint] not in public_routes\
+            and request.endpoint!="static":
         print "uh oh"
         print request.endpoint
         return redirect("/login.html")
@@ -103,7 +104,8 @@ def createaccount():
     db = get_db()
     cur = db.cursor()
     print 3
-    q = "INSERT INTO user (full_name, username, pass, phone, email) VALUES ('%s','%s',PASSWORD('%s'),'%s','%s')" % (full_name, username, passwd, phone, email)
+    q = "INSERT INTO user (full_name, username, pass, phone, email) VALUES ('%s','%s',PASSWORD('%s'),'%s','%s')" %\
+        (full_name, username, passwd, phone, email)
     print q
     res = cur.execute(q)
     db.autocommit(True) #TODO move this to mysql.py?
@@ -122,5 +124,5 @@ def teardown(exception):
 app.secret_key = '3be32335d4bCb0dCdE7BcacC5c41A8'
 
 #We'll turn off debug in production
-app.debug=True
-app.run(port=8000,host="0.0.0.0")
+app.debug = True
+#app.run(host="0.0.0.0")
