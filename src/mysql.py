@@ -21,3 +21,7 @@ def teardown_db():
     if db is not None:
         db.close()
         g._database = None
+
+
+def format_date(date, time):
+    return date + "T" + time
