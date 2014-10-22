@@ -19,4 +19,6 @@ def root():
     sayings = list(cur.fetchall())
     return sayings[randint(0, len(sayings) - 1)]
 
-app.teardown_appcontext(teardown_db)
+@app.teardown_appcontext
+def teardown():
+    teardown_db()
