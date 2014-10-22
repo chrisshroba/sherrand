@@ -1,29 +1,25 @@
-import string
 from flask import *
-from random import randint
 from mysql import get_db, teardown_db
-import random
-import MySQLdb
-
-
 
 app = Flask(__name__,
             static_folder="../static",
             static_path="")
 
-public_routes=[]
+public_routes = []
+
+
 def is_public(fn):
     public_routes.append(fn)
     return fn
 
+
 @app.before_request
 def before_request():
     if request.endpoint and not session.get("user", None) and app.view_functions[request.endpoint] not in public_routes\
-            and request.endpoint!="static":
+            and request.endpoint != "static":
         print "uh oh"
         print request.endpoint
         return redirect("/login.html")
-
 
 
 @app.route('/')
@@ -37,17 +33,6 @@ def root():
     # sayings = list(cur.fetchall())
     # db.close()
     return "Hi, I'm root"
-@is_public
-@app.route("/setSesh")
-def ss():
-    session["user"] = "foo"
-    return "Done"
-
-@is_public
-@app.route("/deleteSesh")
-def ds():
-    session = {}
-    return "Done"
 
 
 def lookup_user(username, password):
@@ -82,14 +67,17 @@ def login():
     else:
         return redirect("/login.html")
 
+
 @app.route("/loginsuccess")
 def loginsuccess():
     return "You have successful logged in."
+
 
 @app.route("/logout")
 def logout():
     session["user"] = None
     return "Logged out."
+
 
 @is_public
 @app.route("/createaccount", methods=["POST"])
@@ -108,7 +96,7 @@ def createaccount():
         (full_name, username, passwd, phone, email)
     print q
     res = cur.execute(q)
-    db.autocommit(True) #TODO move this to mysql.py?
+    db.commit(True)
     print res
     session["user"] = username
     print "sesh user was set"
@@ -116,12 +104,11 @@ def createaccount():
     return "Created Account."
 
 
-
 @app.teardown_appcontext
 def teardown(exception):
     teardown_db()
 
-app.secret_key = '3be32335d4bCb0dCdE7BcacC5c41A8'
+app.secret_key = '3be32335d4bCb0dCdE7BCACC5c41A8'
 
 #We'll turn off debug in production
 app.debug = True
