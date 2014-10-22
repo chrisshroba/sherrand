@@ -158,7 +158,7 @@ class RideOffer():
               DestinationName,
               DestinationLat,
               DestinationLng
-            ) VALUES (%s, %s, %s, $s, %s, %s, %s, %s, %s, %s, %s)
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 self.title,
