@@ -21,5 +21,5 @@ def root():
 
 
 @app.teardown_appcontext
-def teardown():
+def teardown(exception):
     teardown_db()
