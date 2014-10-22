@@ -3,6 +3,7 @@ from random import randint
 from mysql import get_db, teardown_db
 from jsonschema import validate, ValidationError
 from RideRequest import RideRequest
+from RideOffer import RideOffer
 
 app = Flask(__name__,
             static_folder="../static",
@@ -66,6 +67,48 @@ def request_add():
     new_request = RideRequest(j)
     new_request.insert()
     return message_response(200, "Successfully added request!")
+
+
+@app.route('/api/offers', methods=['GET'])
+def offer_get_all():
+    return jsonify({"offer_list": RideOffer.get_all()})
+
+
+@app.route('/api/offers/<int:offer_id>', methods=['GET'])
+def offer_get_with_id(offer_id):
+    return jsonify(RideOffer.get_with_id(offer_id))
+
+
+@app.route('/api/offers/<int:offer_id>', methods=['PUT'])
+def offer_update(offer_id):
+    j = request.get_json()
+    try:
+        validate(j, RideOffer.schema)
+    except ValidationError as e:
+        return message_response(400, "Malformed JSON request: " + e.message)
+    new_offer = RideOffer(j)
+    new_offer.id = offer_id
+    new_offer.update()
+    return message_response(200, "Successfully updated offer!")
+
+
+@app.route('/api/offers/<int:offer_id>', methods=['DELETE'])
+def offer_delete(offer_id):
+    RideOffer.delete_with_id(offer_id)
+    return message_response(200, "Successfully deleted offer!")
+
+
+@app.route('/api/offers', methods=['POST'])
+def offer_add():
+    j = request.get_json()
+    try:
+        validate(j, RideOffer.schema)
+    except ValidationError as e:
+        return message_response(400, "Malformed JSON request: " + e.message)
+    new_offer = RideOffer(j)
+    new_offer.insert()
+    return message_response(200, "Successfully added offer!")
+
 
 
 @app.teardown_appcontext
