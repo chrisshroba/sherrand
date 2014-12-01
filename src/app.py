@@ -28,6 +28,16 @@ def root():
     return sayings[randint(0, len(sayings) - 1)]
 
 
+@app.route('/request')
+def request_ride():
+    return render_template('request_ride.html')
+
+
+@app.route('/offer')
+def offer_ride():
+    return render_template('offer_ride.html')
+
+
 @app.route('/api/requests', methods=['GET'])
 def request_get_all():
     return jsonify({"request_list": RideRequest.get_all()})
