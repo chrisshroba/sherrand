@@ -12,21 +12,113 @@ app = Flask(__name__,
 # Turn off for production
 app.debug = True
 
+public_routes = []
 
-def message_response(code, message):
-    response = jsonify({"message": message})
-    response.status_code = code
-    return response
-
+def is_public(fn):
+    public_routes.append(fn)
+    return fn
 
 @app.route('/')
 def root():
+    # db = get_db()
+    # cur = db.cursor()
+    # cur.execute("SELECT * FROM sayings")
+    # sayings = list(cur.fetchall())
+    # return sayings[randint(0, len(sayings) - 1)]
+    if session["user"]:
+        return redirect("/home")
+    return redirect("/login")
+
+
+@is_public
+@app.route("/login", methods=["GET", "POST"])
+def login_page():
+    feedback = session["feedback"]
+    feedback_code = session["feedback_code"]
+    session["feedback"] = None
+    session["feedback_code"] = None
+    return render_template("login.html", simplenav='yes', feedback=feedback, feedback_code=feedback_code)
+
+def lookup_user(username, password):
     db = get_db()
     cur = db.cursor()
-    cur.execute("SELECT * FROM sayings")
-    sayings = list(cur.fetchall())
-    return sayings[randint(0, len(sayings) - 1)]
+    q = "SELECT * FROM Users WHERE username = %s AND password = PASSWORD(%s) LIMIT 1"
+    cur.execute(q, (username, password))
+    results = [dict(id=item[0], username=item[1], password=item[2], first_name=item[3], last_name=item[4], phone=item[5], email=item[6], score=item[7], photo=item[8], d_rating=item[9], p_rating=item[10]) for item in cur.fetchall()]
+    if len(results) == 0:
+        return None
+    return results[0]
 
+@is_public
+@app.route("/api/login", methods=["POST"])
+def login():
+    username = request.form.get("username", None)
+    password = request.form.get("password", None)
+
+    if (not username) or (not password):
+        return jsonify({
+            "user": None
+        })
+
+    user = lookup_user(username, password)
+    
+    session["user"] = user
+    if user:
+        return redirect("/home")
+    else:
+        print "here"
+        session["feedback"] = "Invalid username or password"
+        session["feedback_code"] = "warning"
+        return redirect("/login")
+
+@app.route("/logout")
+def logout():
+    session["user"] = None
+    session["feedback"] = "Successfully logged out"
+    session["feedback_code"] = "success"
+    return redirect("/login")
+
+@is_public
+@app.route("/home", methods=["GET"])
+def home_page():
+    return render_template("home.html")
+
+@is_public
+@app.route("/signup", methods=["GET"])
+def signup():
+    return render_template("signup.html", simplenav='yes')
+
+@is_public
+@app.route("/api/signup", methods=["POST"])
+def create_account():
+    first_name = request.form.get("first_name")
+    last_name = request.form.get("last_name")
+    username = request.form.get("username")
+    password = request.form.get("password")
+    phone = request.form.get("phone")
+    email = request.form.get("email")
+
+    db = get_db()
+    cur = db.cursor()
+    q = """
+        INSERT INTO Users (first_name, last_name, username, password, phone, email)
+        VALUES (%s, %s, %s,PASSWORD(%s), %s, %s)
+        """
+    # print q
+    res = cur.execute(q, (first_name, last_name, username, password, phone, email))
+    db.commit()
+    # print res
+    
+    session["feedback"] = "Account successfully created"
+    session["feedback_code"] = "success"
+
+    return redirect("/login")
+
+
+# def message_response(code, message):
+#     response = jsonify({"message": message})
+#     response.status_code = code
+#     return response
 
 @app.route('/request')
 def request_ride():
@@ -119,8 +211,30 @@ def offer_add():
     new_offer.insert()
     return message_response(200, "Successfully added offer!")
 
+@app.before_request
+def before_request():
+    if request.endpoint and not session.get("user", None) and app.view_functions[request.endpoint] not in public_routes\
+            and request.endpoint != "static":
+        print "uh oh"
+        print request.endpoint
+        return redirect("/login")
+
+def lookup_events():
+    db = get_db()
+    cur = db.cursor()
+    q = "SELECT * FROM Passangers, Rides, Offers WHERE Passangers.user_id = %s AND password = PASSWORD(%s) LIMIT 1"
+    cur.execute(q, (username, password))
+    results = [dict(id=item[0], username=item[1], password=item[2], first_name=item[3], last_name=item[4], phone=item[5], email=item[6], score=item[7], photo=item[8], d_rating=item[9], p_rating=item[10]) for item in cur.fetchall()]
+    if len(results) == 0:
+        return None
+    return results[0]
 
 
 @app.teardown_appcontext
 def teardown(exception):
     teardown_db()
+
+app.secret_key = '3be32335d4bCb0dCdE7BCACC5c41A8'
+
+if __name__ == '__main__':  
+    app.run()

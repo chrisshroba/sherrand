@@ -1,48 +1,54 @@
 {% extends "base.html" %}
 {% block title %}Offer a Ride{% endblock %}
 {% block content %}
-<div id="ride-content">
-    <div id="ride-instruction"> Please fill out the ride detail</div>
-    <table id="ride-detail">
-        <tr>
-            <td colspan="4">
-               <input id="ride-title" class="inputs" type="text" placeholder="Untitled event">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input id="ride-date" class="inputs" type="date">
-            </td>
-            <td>
-                <input id="ride-start-time" class="inputs" type="time">
-            </td>
-            <td>
-                to
-            </td>
-            <td>
-                <input id="ride-end-time" class="inputs" type="time">
-            </td>
-        </tr>
-        <tr id="ride-origin">
-            <td colspan="4">
-                <input id="ride-title" class="inputs" type="text" placeholder="From">
-            </td>
-        </tr>
-        <tr id="ride-destination">
-            <td colspan="4">
-                <input id="ride-title" class="inputs" type="text" placeholder="To">
-            </td>
-        </tr>
-        <tr id="ride-description">
-            <td colspan="4">
-                <textarea id="ride-description" class="inputs" placeholder="Description" rows="6" cols="100"></textarea>
-            </td>
-        </tr>
-    </table>
-
-    <div id="button-group">
-        <a href="#" class="button red">Discard</a>
-        <a href="#" class="button green">Submit</a>
-    </div>
+<div class="contentbox">
+    <div class="instruction"> Please fill out the ride detail</div>
+    {% if feedback %}
+        {% if feedback_code == "warning" %}
+            <div class="alert alert-danger" role="alert">{{ feedback }}</div>
+        {% elif feedback_code == "success" %}
+            <div class="alert alert-success" role="alert">{{ feedback }}</div>
+        {% endif %}
+    {% else %}
+        <p></p>
+    {% endif %}
+    <form action="{{ url_for('login') }}"method="post" action="index.html">
+        <p><input class="form-control" id="ride-title" type="text" name="title" placeholder="Event title"></p>
+        <p>
+            <div class="input-group">
+                <span class="input-group-addon">Date</span>
+                <input class="form-control" id="ride-date" type="date" name="date">
+            </div>
+        </p>
+        <p>
+            <div class="input-group">
+                <input class="form-control" id="ride-start-time" type="time" name="start_time">
+                <span class="input-group-addon">To</span>
+                <input class="form-control" id="ride-start-time" type="time" name="end_time">
+            </div>
+        </p>
+        <p>
+            <div class="input-group">
+                <span class="input-group-addon">From</span>
+                <input class="form-control" id="ride-origin" type="text" name="origin">
+            </div>
+        </p>
+        <p>
+            <div class="input-group">
+                <span class="input-group-addon">To</span>
+                <input class="form-control" id="ride-destination" type="text" name="destination">
+            </div>
+        </p>
+        <p>
+            <div class="input-group">
+                <textarea class="form-control" id="ride-description" rows="3" name="description" placeholder="Description"></textarea>
+            </div>
+        </p>
+        <br>
+        <div id="button-group">
+            <input class="btn btn-danger" type=reset value="Discard"></input>
+            <input class="btn btn-success" type=submit value="Submit"></input>
+        </div>
+    </form>
 </div>
 {% endblock %}

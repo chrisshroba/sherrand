@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}  
+{% block content %}
+<div class="contentwapper">
+    <div id="button-group">
+        <a href="/request" class="btn btn-info">Request</a>
+        <a href="/offer" class="btn btn-warning">Offer</a>
+    </div>
+    <div class="instruction"> Scheduled Events</div>
+        {% if session.events %}
+            {% for i in range(0, 5) %}
+                <div class="well well-lg"></div>
+            {% endfor %}
+        {% else %}
+            <div class="subtitle">No events</div>
+        {% endif %}
+    <br>
+    <div class="instruction"> Recommendations</div>
+</div>
+{% endblock %}

@@ -1,37 +1,48 @@
 {% extends "base.html" %}
 {% block title %}Request a Ride{% endblock %}
 {% block content %}
-<div id="ride-content">
-    <div id="ride-instruction"> Please fill out the ride detail</div>
-    <table id="ride-detail">
-        <tr>
-            <td>
-                <input id="ride-date" class="inputs" type="date">
-            </td>
-            <td>
-                <input id="ride-start-time" class="inputs" type="time">
-            </td>
-            <td>
-                to
-            </td>
-            <td>
-                <input id="ride-end-time" class="inputs" type="time">
-            </td>
-        </tr>
-        <tr id="ride-origin">
-            <td colspan="4">
-                <input id="ride-title" class="inputs" type="text" placeholder="From">
-            </td>
-        </tr>
-        <tr id="ride-destination">
-            <td colspan="4">
-                <input id="ride-title" class="inputs" type="text" placeholder="To">
-            </td>
-        </tr>
-    </table>
-
-    <div id="button-group">
-        <a href="#" class="button blue">Search</a>
-    </div>
+<div class="contentbox">
+    <div class="instruction"> Please fill out the ride detail</div>
+    {% if feedback %}
+        {% if feedback_code == "warning" %}
+            <div class="alert alert-danger" role="alert">{{ feedback }}</div>
+        {% elif feedback_code == "success" %}
+            <div class="alert alert-success" role="alert">{{ feedback }}</div>
+        {% endif %}
+    {% else %}
+        <p></p>
+    {% endif %}
+    <form action="{{ url_for('login') }}"method="post" action="index.html">
+        <p>
+            <div class="input-group">
+                <span class="input-group-addon">Date</span>
+                <input class="form-control" id="ride-date" type="date" name="date">
+            </div>
+        </p>
+        <p>
+            <div class="input-group">
+                <input class="form-control" id="ride-start-time" type="time" name="start_time">
+                <span class="input-group-addon">To</span>
+                <input class="form-control" id="ride-start-time" type="time" name="end_time">
+            </div>
+        </p>
+        </p>
+        <p>
+            <div class="input-group">
+                <span class="input-group-addon">From</span>
+                <input class="form-control" id="ride-origin" type="text" name="origin">
+            </div>
+        </p>
+        <p>
+            <div class="input-group">
+                <span class="input-group-addon">To</span>
+                <input class="form-control" id="ride-destination" type="text" name="destination">
+            </div>
+        </p>
+        <br>
+        <div id="button-group">
+            <input class="btn btn-primary" type=submit value="Search"></input>
+        </div>
+    </form>
 </div>
 {% endblock %}

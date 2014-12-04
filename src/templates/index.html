@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %} 
+{% block content %}
+<div class="title">Share rides and<br>run errands together!</div>
+<div class="inputbox">
+    {% if error %}   
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+    {% else %}
+        <p></p>
+    {% endif %}
+    <form action="{{ url_for('login') }}" method="post" action="index.html">
+        <p><input class="form-control" type="text" name="username" placeholder="Username"></p>
+        <p><input class="form-control" type="password" name="password" placeholder="Password"></p>
+        <p class="remember_me">
+          <label>
+            <input type="checkbox" name="remember_me" id="remember_me">
+            Remember me on this computer
+          </label>
+        </p>
+        <div id="button-group">
+          <input class="btn btn-default" type=submit value="Login"></input>
+        </div>
+        <a href = "/signup">Create Account</a>
+
+    </form>
+
+
+{% endblock %}
