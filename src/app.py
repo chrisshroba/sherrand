@@ -15,9 +15,18 @@ app.debug = True
 
 public_routes = []
 
+
 def is_public(fn):
     public_routes.append(fn)
     return fn
+
+
+def update_notifications():
+    user = session["user"] if "user" in session else None
+    if user:
+        notifs = Notification.get_unread_by_user_id(user["id"])
+        session["notifications"] = notifs
+        session["has_unread"] = len(notifs) > 0
 
 @app.route('/')
 def root():
@@ -63,9 +72,6 @@ def login():
     
     session["user"] = user
     if user:
-        notifs = Notification.get_unread_by_user_id(user["id"])
-        session["notifications"] = notifs
-        session["has_unread"] = len(notifs) > 0
         return redirect("/home")
     else:
         print "here"
@@ -83,6 +89,7 @@ def logout():
 @is_public
 @app.route("/home", methods=["GET"])
 def home_page():
+    update_notifications()
     arr = ["1", "2"]
     # sessions["events"] = arr#= lookup_events()
     return render_template("home.html")
@@ -126,19 +133,23 @@ def message_response(code, message):
 
 @app.route('/ride')
 def ride_info():
+    update_notifications()
     return render_template('ride_info.html')
 
 @app.route('/profile')
 def profile():
+    update_notifications()
     return render_template('profile.html')
 
 @app.route('/request')
 def request_ride():
+    update_notifications()
     return render_template('request_ride.html')
 
 
 @app.route('/offer')
 def offer_ride():
+    update_notifications()
     return render_template('offer_ride.html')
 
 
@@ -230,6 +241,7 @@ def before_request():
         print "uh oh"
         print request.endpoint
         return redirect("/login")
+
 
 def lookup_events():
     db = get_db()
