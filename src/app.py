@@ -5,6 +5,7 @@ from jsonschema import validate, ValidationError
 from RideRequest import RideRequest
 from RideOffer import RideOffer
 from Notification import Notification
+from Matching import check_for_matches_offer, check_for_matches_request
 
 app = Flask(__name__,
             static_folder="../static",
@@ -191,6 +192,7 @@ def request_add():
         return message_response(400, "Malformed JSON request: " + e.message)
     new_request = RideRequest(j)
     new_request.insert()
+    check_for_matches_request(new_request.to_json_object())
     return message_response(200, "Successfully added request!")
 
 

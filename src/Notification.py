@@ -1,4 +1,4 @@
-from mysql import get_db, format_date
+from mysql import get_db
 
 
 class Notification():
@@ -81,7 +81,7 @@ class Notification():
         cur = db.cursor()
         cur.execute(
             """
-            INSERT INTO Offers (
+            INSERT INTO Notifications (
                 user_id,
                 message,
                 link,
@@ -102,7 +102,7 @@ class Notification():
         cur = db.cursor()
         cur.execute(
             """
-            UPDATE Offers
+            UPDATE Notifications
             SET
               user_id=%s,
               message=%s,

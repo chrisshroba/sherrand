@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS Requests
 (
   Id MEDIUMINT NOT NULL AUTO_INCREMENT,
   Title VARCHAR(140),
-  driver_id int(11) DEFAULT NULL,
+  User MEDIUMINT NOT NULL,
   StartDateTime DATETIME NOT NULL,
   EndDateTime DATETIME NOT NULL,
   OriginName VARCHAR(140),
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS Offers
 (
   Id MEDIUMINT NOT NULL AUTO_INCREMENT,
   Title VARCHAR(140),
-  user_id int(11) DEFAULT NULL,
+  User MEDIUMINT NOT NULL,
   MaxSeats INT NOT NULL,
   OpenSeats INT NOT NULL,
   StartDateTime DATETIME NOT NULL,
@@ -89,3 +89,27 @@ VALUES ("Hello, system!");
 INSERT INTO Users (first_name, last_name, username, password, phone, email)
 VALUES ("asdf", "asdf", "asdf",PASSWORD("asdf"), "0000000000", "asdf@gmail.com")
 
+SELECT
+  User, (
+            3959 * acos (
+                cos ( radians(1.234) )
+                * cos( radians( lat ) )
+                * cos( radians( lng ) - radians(1.234) )
+                + sin ( radians(1.234) )
+                  * sin( radians( lat ) )
+            )
+          ) AS origin_distance,
+          (
+            3959 * acos (
+                cos ( radians(1.234) )
+                * cos( radians( lat ) )
+                * cos( radians( lng ) - radians(1.234) )
+                + sin ( radians(1.234) )
+                  * sin( radians( lat ) )
+            )
+          ) AS dest_distance
+FROM Requests
+HAVING
+  (origin_distance < 1 OR OriginName=1.234)
+  AND (dest_distance < 1 OR DestinationName=1.234)
+  AND DATE(StartDateTime)=1.234;
