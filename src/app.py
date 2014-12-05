@@ -20,11 +20,6 @@ def is_public(fn):
 
 @app.route('/')
 def root():
-    # db = get_db()
-    # cur = db.cursor()
-    # cur.execute("SELECT * FROM sayings")
-    # sayings = list(cur.fetchall())
-    # return sayings[randint(0, len(sayings) - 1)]
     if session["user"]:
         return redirect("/home")
     return redirect("/login")
@@ -47,6 +42,8 @@ def lookup_user(username, password):
     results = [dict(id=item[0], username=item[1], password=item[2], first_name=item[3], last_name=item[4], phone=item[5], email=item[6], score=item[7], photo=item[8], d_rating=item[9], p_rating=item[10]) for item in cur.fetchall()]
     if len(results) == 0:
         return None
+    if results[0]["photo"] == None:
+        results[0]["photo"] = "https://cdnil0.fiverrcdn.com/photos/419911/v2_680/img1.jpg"
     return results[0]
 
 @is_public
@@ -81,6 +78,8 @@ def logout():
 @is_public
 @app.route("/home", methods=["GET"])
 def home_page():
+    arr = ["1", "2"]
+    # sessions["events"] = arr#= lookup_events()
     return render_template("home.html")
 
 @is_public
@@ -119,6 +118,14 @@ def create_account():
 #     response = jsonify({"message": message})
 #     response.status_code = code
 #     return response
+
+@app.route('/ride')
+def ride_info():
+    return render_template('ride_info.html')
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
 
 @app.route('/request')
 def request_ride():
@@ -222,12 +229,13 @@ def before_request():
 def lookup_events():
     db = get_db()
     cur = db.cursor()
-    q = "SELECT * FROM Passangers, Rides, Offers WHERE Passangers.user_id = %s AND password = PASSWORD(%s) LIMIT 1"
-    cur.execute(q, (username, password))
-    results = [dict(id=item[0], username=item[1], password=item[2], first_name=item[3], last_name=item[4], phone=item[5], email=item[6], score=item[7], photo=item[8], d_rating=item[9], p_rating=item[10]) for item in cur.fetchall()]
+    q = "SELECT * FROM Passangers, Rides, Offers WHERE Passangers.user_id = %s AND Passangers.ride_id = Rides.Id AND Rides.offer_id = Offers.Id"
+    cur.execute(q, (session.user.Id))
+    results = cur.fetchall()
+    # results = [dict(id=item[0], username=item[1], password=item[2], first_name=item[3], last_name=item[4], phone=item[5], email=item[6], score=item[7], photo=item[8], d_rating=item[9], p_rating=item[10]) for item in cur.fetchall()]
     if len(results) == 0:
         return None
-    return results[0]
+    return results
 
 
 @app.teardown_appcontext

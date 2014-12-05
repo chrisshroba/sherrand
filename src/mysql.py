@@ -5,8 +5,8 @@ import MySQLdb
 def connect_to_database():
     return MySQLdb.connect(host="localhost",
                            user="root",
-                           passwd="password",
-                           db="test")
+                           passwd="",
+                           db="cs411sharrend")
 
 
 def get_db():

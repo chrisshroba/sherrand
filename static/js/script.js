@@ -17,3 +17,9 @@ $(function() {
 
     
 });
+
+$(document).ready(function(){
+  $('#feedback').click(function(){
+    $(this).fadeOut();
+  });
+});

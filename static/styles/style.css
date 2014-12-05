@@ -9,6 +9,10 @@
    font-size: 50px;
 }
 
+.unavailable {
+  color: #bdc3c7;
+}
+
 .inputbox {
    width: 300px;
    position: relative;
@@ -34,13 +38,15 @@
     font-size: 20px;
     color: #bdc3c7;
     padding: 20px;
-
-
 }
 
+/*img {
+    position: absolute;
+    clip: rect(0px,100px,100px,0px);
+}*/
+
 .profile-pic {
-    width: 200px;
-    height: 200px;
+    width: 400px;
     background-size: cover;
     display: block;
     border-radius: 100px;
