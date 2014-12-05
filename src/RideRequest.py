@@ -112,21 +112,20 @@ class RideRequest():
     def sql_response_to_json(s):
         return {
             "id": s[0],
-            "title": s[1],
-            "user_id": s[2],
-            "start_time": str(s[3].time()),
-            "start_date": str(s[3].date()),
-            "end_time": str(s[4].time()),
-            "end_date": str(s[4].date()),
+            "user_id": s[1],
+            "start_time": str(s[2].time()),
+            "start_date": str(s[2].date()),
+            "end_time": str(s[3].time()),
+            "end_date": str(s[3].date()),
             "origin": {
-                "name": s[5],
-                "lat": s[6],
-                "lng": s[7]
+                "name": s[4],
+                "lat": s[5],
+                "lng": s[6]
             },
             "destination": {
-                "name": s[8],
-                "lat": s[9],
-                "lng": s[10]
+                "name": s[7],
+                "lat": s[8],
+                "lng": s[9]
             }
         }
     @staticmethod
@@ -148,7 +147,7 @@ class RideRequest():
               DestinationName,
               DestinationLat,
               DestinationLng
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 self.user_id,
@@ -187,7 +186,6 @@ class RideRequest():
             WHERE Id=%s
             """,
             (
-                self.title,
                 self.user_id,
                 format_date(self.start_date, self.start_time),
                 format_date(self.end_date, self.end_time),
