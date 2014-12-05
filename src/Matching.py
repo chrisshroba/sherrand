@@ -1,3 +1,4 @@
+# Got longitude/latitude distance formula from: http://www.movable-type.co.uk/scripts/latlong.html
 from mysql import get_db
 from Notification import Notification
 
@@ -16,21 +17,21 @@ def check_for_matches_request(new_request):
         """
         SELECT
           Id, (
-            3959 * acos (
-              cos ( radians(%s) )
-              * cos( radians( OriginLat ) )
-              * cos( radians( OriginLng ) - radians(%s) )
-              + sin ( radians(%s) )
-              * sin( radians( OriginLat ) )
+            3959 * ACOS(
+              COS(RADIANS(%s))
+              * COS(RADIANS(OriginLat))
+              * COS(RADIANS(OriginLng) - RADIANS(%s) )
+              + SIN(RADIANS(%s))
+              * SIN(RADIANS(OriginLat))
             )
           ) AS origin_distance,
           (
-            3959 * acos (
-              cos ( radians(%s) )
-              * cos( radians( DestinationLat ) )
-              * cos( radians( DestinationLng ) - radians(%s) )
-              + sin ( radians(%s) )
-              * sin( radians( DestinationLat ) )
+            3959 * ACOS(
+              COS(RADIANS(%s))
+              * COS(RADIANS(DestinationLat))
+              * COS(RADIANS(DestinationLng) - RADIANS(%s))
+              + SIN(RADIANS(%s))
+              * SIN(RADIANS(DestinationLat))
             )
           ) AS dest_distance,
           OriginName, DestinationName, StartDateTime
@@ -67,21 +68,21 @@ def check_for_matches_offer(new_offer):
         """
         SELECT
           User, (
-            3959 * acos (
-              cos ( radians(%s) )
-              * cos( radians( OriginLat ) )
-              * cos( radians( OriginLng ) - radians(%s) )
-              + sin ( radians(%s) )
-              * sin( radians( OriginLat ) )
+            3959 * ACOS(
+              COS(RADIANS(%s))
+              * COS(RADIANS(OriginLat))
+              * COS(RADIANS(OriginLng) - RADIANS(%s))
+              + SIN(RADIANS(%s))
+              * SIN(RADIANS(OriginLat))
             )
           ) AS origin_distance,
           (
-            3959 * acos (
-              cos ( radians(%s) )
-              * cos( radians( DestinationLat ) )
-              * cos( radians( DestinationLng ) - radians(%s) )
-              + sin ( radians(%s) )
-              * sin( radians( DestinationLat ) )
+            3959 * ACOS(
+              COS (RADIANS(%s))
+              * COS(RADIANS(DestinationLat))
+              * COS(RADIANS(DestinationLng) - RADIANS(%s))
+              + SIN(RADIANS(%s))
+              * SIN(RADIANS(DestinationLat))
             )
           ) AS dest_distance,
           OriginName, DestinationName, StartDateTime
