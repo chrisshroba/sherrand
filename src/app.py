@@ -31,13 +31,13 @@ def update_notifications():
 
 @app.route('/')
 def root():
-    if session["user"]:
+    if "user" in session:
         return redirect("/home")
     return redirect("/login")
 
 
 @is_public
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login", methods=["GET"])
 def login_page():
     feedback = session["feedback"] if "feedback" in session else None
     feedback_code = session["feedback_code"] if "feedback_code" in session else None
@@ -91,8 +91,8 @@ def logout():
 @app.route("/home", methods=["GET"])
 def home_page():
     update_notifications()
-    arr = ["1", "2"]
-    # sessions["events"] = arr#= lookup_events()
+    # session["events"] = lookup_events()
+    # return str(lookup_events()[0][5])
     return render_template("home.html")
 
 @is_public
@@ -103,12 +103,11 @@ def signup():
 @is_public
 @app.route("/api/signup", methods=["POST"])
 def create_account():
-    first_name = request.form.get("first_name")
-    last_name = request.form.get("last_name")
-    username = request.form.get("username")
-    password = request.form.get("password")
-    phone = request.form.get("phone")
-    email = request.form.get("email")
+    first_name = request.form.get("first_name") if "first_name" in request.form else session.user.first_name
+    last_name = request.form.get("last_name") if "last_name" in request.form else session.user.last_name
+    password = request.form.get("password") if "password" in request.form else session.user.password
+    phone = request.form.get("phone") if "phone" in request.form else session.user.phone
+    email = request.form.get("email") if "email" in request.form else session.user.email
 
     db = get_db()
     cur = db.cursor()
@@ -127,10 +126,10 @@ def create_account():
     return redirect("/login")
 
 
-def message_response(code, message):
-    response = jsonify({"message": message})
-    response.status_code = code
-    return response
+# def message_response(code, message):
+#     response = jsonify({"message": message})
+#     response.status_code = code
+#     return response
 
 @app.route('/ride')
 def ride_info():
@@ -141,6 +140,39 @@ def ride_info():
 def profile():
     update_notifications()
     return render_template('profile.html')
+
+@app.route('/edit_profile')
+def edit_profile_page():
+    update_notifications()
+    return render_template('edit_profile.html')
+
+@app.route('/api/edit_profile', methods=['POST'])
+def edit_profile():
+    update_notifications()
+    first_name = request.form.get("first_name") if "first_name" in request.form else session["user"]["first_name"]
+    last_name = request.form.get("last_name") if "last_name" in request.form else session["user"]["last_name"]
+    password = request.form.get("password") if "password" in request.form else session["user"]["passward"]
+    phone = request.form.get("phone") if "phone" in request.form else session["user"]["phone"]
+    email = request.form.get("email") if "email" in request.form else session["user"]["email"]
+
+    return session["user"]["first_name"]
+    db = get_db()
+    cur = db.cursor()
+    q = """
+        UPDATE mytable
+            SET first_name = %s,
+                column2 = value2
+    WHERE key_value = some_value;
+        """
+    # print q
+    res = cur.execute(q, (first_name, last_name, username, password, phone, email))
+    db.commit()
+    # print res
+    
+    session["feedback"] = "Account successfully created"
+    session["feedback_code"] = "success"
+
+    return redirect("/profile")
 
 @app.route('/request')
 def request_ride():
@@ -154,33 +186,33 @@ def offer_ride():
     return render_template('offer_ride.html')
 
 
-# @app.route('/api/requests', methods=['GET'])
-# def request_get_all():
-#     return jsonify({"request_list": RideRequest.get_all()})
+# # @app.route('/api/requests', methods=['GET'])
+# # def request_get_all():
+# #     return jsonify({"request_list": RideRequest.get_all()})
 
 
-# @app.route('/api/requests/<int:request_id>', methods=['GET'])
-# def request_get_with_id(request_id):
-#     return jsonify(RideRequest.get_with_id(request_id))
+# # @app.route('/api/requests/<int:request_id>', methods=['GET'])
+# # def request_get_with_id(request_id):
+# #     return jsonify(RideRequest.get_with_id(request_id))
 
 
-# @app.route('/api/requests/<int:request_id>', methods=['PUT'])
-# def request_update(request_id):
-#     j = request.get_json()
-#     try:
-#         validate(j, RideRequest.schema)
-#     except ValidationError as e:
-#         return message_response(400, "Malformed JSON request: " + e.message)
-#     new_request = RideRequest(j)
-#     new_request.id = request_id
-#     new_request.update()
-#     return message_response(200, "Successfully updated request!")
+# # @app.route('/api/requests/<int:request_id>', methods=['PUT'])
+# # def request_update(request_id):
+# #     j = request.get_json()
+# #     try:
+# #         validate(j, RideRequest.schema)
+# #     except ValidationError as e:
+# #         return message_response(400, "Malformed JSON request: " + e.message)
+# #     new_request = RideRequest(j)
+# #     new_request.id = request_id
+# #     new_request.update()
+# #     return message_response(200, "Successfully updated request!")
 
 
-# @app.route('/api/requests/<int:request_id>', methods=['DELETE'])
-# def request_delete(request_id):
-#     RideRequest.delete_with_id(request_id)
-#     return message_response(200, "Successfully deleted request!")
+# # @app.route('/api/requests/<int:request_id>', methods=['DELETE'])
+# # def request_delete(request_id):
+# #     RideRequest.delete_with_id(request_id)
+# #     return message_response(200, "Successfully deleted request!")
 
 
 @app.route('/api/requests', methods=['POST'])
@@ -216,9 +248,9 @@ def request_add():
     return redirect("/confirmation")
 
 
-@app.route('/api/offers', methods=['GET'])
-def offer_get_all():
-    return jsonify({"offer_list": RideOffer.get_all()})
+# @app.route('/api/offers', methods=['GET'])
+# def offer_get_all():
+#     return jsonify({"offer_list": RideOffer.get_all()})
 
 
 
@@ -227,34 +259,34 @@ def confirmation():
     return render_template('confirmation.html')
 
 
-# @app.route('/api/offers', methods=['GET'])
-# def offer_get_all():
-#     return jsonify({"offer_list": RideOffer.get_all()})
+# # @app.route('/api/offers', methods=['GET'])
+# # def offer_get_all():
+# #     return jsonify({"offer_list": RideOffer.get_all()})
 
 
-@app.route('/offers/<int:offer_id>', methods=['GET'])
-def offer_get_with_id(offer_id):
-    offer = RideOffer.get_with_id(offer_id)
-    return render_template('ride_info.html', offer=offer)
+# @app.route('/offers/<int:offer_id>', methods=['GET'])
+# def offer_get_with_id(offer_id):
+#     offer = RideOffer.get_with_id(offer_id)
+#     return render_template('ride_info.html', offer=offer)
 
 
-# @app.route('/api/offers/<int:offer_id>', methods=['PUT'])
-# def offer_update(offer_id):
-#     j = request.get_json()
-#     try:
-#         validate(j, RideOffer.schema)
-#     except ValidationError as e:
-#         return message_response(400, "Malformed JSON request: " + e.message)
-#     new_offer = RideOffer(j)
-#     new_offer.id = offer_id
-#     new_offer.update()
-#     return message_response(200, "Successfully updated offer!")
+# # @app.route('/api/offers/<int:offer_id>', methods=['PUT'])
+# # def offer_update(offer_id):
+# #     j = request.get_json()
+# #     try:
+# #         validate(j, RideOffer.schema)
+# #     except ValidationError as e:
+# #         return message_response(400, "Malformed JSON request: " + e.message)
+# #     new_offer = RideOffer(j)
+# #     new_offer.id = offer_id
+# #     new_offer.update()
+# #     return message_response(200, "Successfully updated offer!")
 
 
-# @app.route('/api/offers/<int:offer_id>', methods=['DELETE'])
-# def offer_delete(offer_id):
-#     RideOffer.delete_with_id(offer_id)
-#     return message_response(200, "Successfully deleted offer!")
+# # @app.route('/api/offers/<int:offer_id>', methods=['DELETE'])
+# # def offer_delete(offer_id):
+# #     RideOffer.delete_with_id(offer_id)
+# #     return message_response(200, "Successfully deleted offer!")
 
 
 @app.route('/api/offers', methods=['POST'])
@@ -276,10 +308,10 @@ def offer_add():
     db = get_db()
     cur = db.cursor()
     q = """
-        INSERT INTO Offers (Title, User, MaxSeats, OpenSeats, StartDateTime, EndDateTime, OriginName, OriginLat, OriginLng,  DestinationName, DestinationLat, DestinationLng )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO Offers (Title, User, MaxSeats, OpenSeats, Date, StartTime, EndTime, OriginName, OriginLat, OriginLng,  DestinationName, DestinationLat, DestinationLng )
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-    cur.execute(q, (title, user, max_seat, open_seat, str(date) + " " + str(start_time), str(date) + " " + str(end_time), origin_name, origin_lat, origin_lon, dest_name, dest_lat, dest_lon))
+    cur.execute(q, (title, user, max_seat, open_seat, date,start_time, end_time, origin_name, origin_lat, origin_lon, dest_name, dest_lat, dest_lon))
 
     q = "SELECT * FROM Offers"
     cur.execute(q)
@@ -306,10 +338,10 @@ def before_request():
 def lookup_events():
     db = get_db()
     cur = db.cursor()
-    q = "SELECT * FROM Passangers, Rides, Offers WHERE Passangers.user_id = %s AND Passangers.ride_id = Rides.Id AND Rides.offer_id = Offers.Id"
-    cur.execute(q, (session.user.Id))
+    q = "SELECT * FROM Offers "
+    cur.execute(q)
     results = cur.fetchall()
-    cur.commit()
+    db.commit()
 
     if len(results) == 0:
         return None

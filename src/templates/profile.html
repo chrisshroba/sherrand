@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}  
+{% block title %}Profile{% endblock %}  
 {% block content %}
 <div class="contentwapper">
     <div class="instruction"> Profile</div>
@@ -12,37 +12,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-6 col-sm-3">
                     <h3>{{ session.user.first_name }} {{ session.user.last_name }}</h3>
                     <h5>{{ session.user.email }}</h5>
-                    <p>
-                        {% if session.user.d_rating %}
-                            {% for i in range(session.user.d_rating) %}
-                                <div class="glyphicon glyphicon-star" aria-hidden="true"></div>
-                            {% endfor %}
-                            {% for i in range(5-session.user.d_rating) %}
-                                <div class="glyphicon glyphicon-star-empty" aria-hidden="true"></div>
-                            {% endfor %}
-                        {% else %}
-                            {% for i in range(0,5) %}
-                                <div class="unavailable glyphicon glyphicon-star-empty" aria-hidden="true"></div>
-                            {% endfor %}
-                        {% endif %}
-                    </p>
-                    <p>
-                        {% if session.user.p_rating %}
-                            {% for i in range(session.user.p_rating) %}
-                                <div class="glyphicon glyphicon-star" aria-hidden="true"></div>
-                            {% endfor %}
-                            {% for i in range(5-session.user.p_rating) %}
-                                <div class="glyphicon glyphicon-star-empty" aria-hidden="true"></div>
-                            {% endfor %}
-                        {% else %}
-                            {% for i in range(0,5) %}
-                                <div class="unavailable glyphicon glyphicon-star-empty" aria-hidden="true"></div>
-                            {% endfor %}
-                        {% endif %}
-                    </p>
+                    <h5>{{ session.user.phone }}</h5>
+                    
+                </div>
+                <div class="pull-right">
+                    <div class="col-xs-6 col-sm-3">
+                        <div id="button-group">
+                            <a class="btn btn-default" href="/edit_profile">Edit</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
