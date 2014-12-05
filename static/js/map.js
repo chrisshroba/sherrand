@@ -44,6 +44,8 @@
                 latlong = event.latLng;
                 from_lat = latlong.lat();
                 from_lon = latlong.lng();
+                $("#ride-origin-lat").val(from_lat);
+                $("#ride-origin-lon").val(from_lon);
 
                 fromMarkerAdded=true;
             }
@@ -62,6 +64,8 @@
                 to_lat = latlong.lat();
                 to_lon = latlong.lng();
                 toMarkerAdded=true;
+                $("#ride-destination-lat").val(to_lat);
+                $("#ride-destination-lon").val(to_lon);
 
             }
         });

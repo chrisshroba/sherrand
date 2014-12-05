@@ -90,12 +90,9 @@ def logout():
 @is_public
 @app.route("/home", methods=["GET"])
 def home_page():
-<<<<<<< HEAD
-=======
     update_notifications()
     arr = ["1", "2"]
     # sessions["events"] = arr#= lookup_events()
->>>>>>> 5a1c1a8752ccfe365e68944bde2e21bf7f8ff8f3
     return render_template("home.html")
 
 @is_public
@@ -218,6 +215,13 @@ def request_add():
 
     return redirect("/confirmation")
 
+
+@app.route('/api/offers', methods=['GET'])
+def offer_get_all():
+    return jsonify({"offer_list": RideOffer.get_all()})
+
+
+
 @app.route('/confirmation')
 def confirmation():
     return render_template('confirmation.html')
@@ -304,8 +308,6 @@ def lookup_events():
 
     if len(results) == 0:
         return None
-    else:
-        None
     return results
 
 
