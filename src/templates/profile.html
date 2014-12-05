@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}  
+{% block content %}
+<div class="contentwapper">
+    <div class="instruction"> Profile</div>
+        <div class="well well-lg">
+            <div class="row">
+                <div class="col-xs-6 col-sm-3">
+                    <div class="profile-pic">
+                        <div class="profile-mask">
+                            <img src="{{ session.user.photo }}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <h3>{{ session.user.first_name }} {{ session.user.last_name }}</h3>
+                    <h5>{{ session.user.email }}</h5>
+                    <p>
+                        {% if session.user.d_rating %}
+                            {% for i in range(session.user.d_rating) %}
+                                <div class="glyphicon glyphicon-star" aria-hidden="true"></div>
+                            {% endfor %}
+                            {% for i in range(5-session.user.d_rating) %}
+                                <div class="glyphicon glyphicon-star-empty" aria-hidden="true"></div>
+                            {% endfor %}
+                        {% else %}
+                            {% for i in range(0,5) %}
+                                <div class="unavailable glyphicon glyphicon-star-empty" aria-hidden="true"></div>
+                            {% endfor %}
+                        {% endif %}
+                    </p>
+                    <p>
+                        {% if session.user.p_rating %}
+                            {% for i in range(session.user.p_rating) %}
+                                <div class="glyphicon glyphicon-star" aria-hidden="true"></div>
+                            {% endfor %}
+                            {% for i in range(5-session.user.p_rating) %}
+                                <div class="glyphicon glyphicon-star-empty" aria-hidden="true"></div>
+                            {% endfor %}
+                        {% else %}
+                            {% for i in range(0,5) %}
+                                <div class="unavailable glyphicon glyphicon-star-empty" aria-hidden="true"></div>
+                            {% endfor %}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    <div class="instruction"> Rides you are offering</div>
+    {% if session.events %}
+        {% for i in range(session.events) %}
+            <div class="glyphicon glyphicon-star" aria-hidden="true"></div>
+        {% endfor %}
+        {% for i in range(5-session.user.d_rating) %}
+            <div class="glyphicon glyphicon-star-empty" aria-hidden="true"></div>
+        {% endfor %}
+    {% else %}
+        <div class="subtitle">No rides offered</div>
+    {% endif %}
+</div>
+{% endblock %}
