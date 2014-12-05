@@ -111,6 +111,7 @@ def setupProxyRoute():
 
 @app.route("/reset")
 def resetRoute():
+    global number_maps
     number_maps = {}
     for number in numbers:
         number_maps[number] = {}

@@ -280,7 +280,7 @@ def offer_get_with_id_post(offer_id):
     cur.execute("SELECT phone FROM Users WHERE id=%s", [requester])
     requester_phone = cur.fetchall()[0][0]
 
-    url = "http://shroba.io:4656/setupProxy?num1=%s&num2=%s" % (requester_phone, driver_phone)
+    url = "http://shroba.io:4555/setupProxy?num1=%s&num2=%s" % (requester_phone, driver_phone)
     make_proxy = urllib2.urlopen(url).open()
 
     return render_template('ride_info.html', offer=offer)
