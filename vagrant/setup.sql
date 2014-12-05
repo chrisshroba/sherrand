@@ -66,6 +66,17 @@ CREATE TABLE IF NOT EXISTS Passangers
   PRIMARY KEY (user_id, ride_id)
 );
 
+CREATE TABLE IF NOT EXISTS Notifications
+(
+  id MEDIUMINT NOT NULL AUTO_INCREMENT,
+  user_id MEDIUMINT NOT NULL,
+  is_read BOOLEAN NOT NULL DEFAULT FALSE,
+  message VARCHAR(140) NOT NULL,
+  link VARCHAR(140) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES Users(id)
+);
+
 INSERT INTO sayings
 VALUES ("Hello, world!");
 INSERT INTO sayings
@@ -77,3 +88,4 @@ VALUES ("Hello, system!");
 
 INSERT INTO Users (first_name, last_name, username, password, phone, email)
 VALUES ("asdf", "asdf", "asdf",PASSWORD("asdf"), "0000000000", "asdf@gmail.com")
+
