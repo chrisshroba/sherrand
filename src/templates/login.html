@@ -5,9 +5,9 @@
 <div class="inputbox">
     {% if feedback %}
         {% if feedback_code == "warning" %}
-            <div class="alert alert-danger" role="alert">{{ feedback }}</div>
+            <div class="feedback alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert">&times;</a>{{ feedback }}</div>
         {% elif feedback_code == "success" %}
-            <div class="alert alert-success" role="alert">{{ feedback }}</div>
+            <div class="feedback alert alert-success" role="alert">{{ feedback }}</div>
         {% endif %}
     {% else %}
         <p></p>

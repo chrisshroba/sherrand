@@ -7,14 +7,35 @@
         <a href="/offer" class="btn btn-warning">Offer</a>
     </div>
     <div class="instruction"> Scheduled Events</div>
-        {% if session.events %}
-            {% for i in range(0, 5) %}
-                <div class="well well-lg"></div>
+        {% if session["events"] %}
+            {% for i in range(0,5) %}
+                <div class="well well-lg">
+                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                    <p>CONTENT</p>
+                </div>
+
             {% endfor %}
+            {% if range(session["events"]) > 5 %}
+                <div class="right"><a href="#">See More</a></div>
+            {% endif %} 
         {% else %}
             <div class="subtitle">No events</div>
         {% endif %}
+        
     <br>
     <div class="instruction"> Recommendations</div>
+        {% if session["recommendations"] %}
+            {% for i in range(0,5) %}
+                <div class="well well-lg">
+                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                </div>
+
+            {% endfor %}
+            {% if range(session["recommendations"]) > 5 %}
+                <div class="right"><a href="#">See More</a></div>
+            {% endif %} 
+        {% else %}
+            <div class="subtitle">No recommendations</div>
+        {% endif %}
 </div>
 {% endblock %}
