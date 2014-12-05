@@ -183,6 +183,10 @@ class RideOffer():
             )
         )
         db.commit()
+        cur = db.cursor()
+        cur.execute("SELECT MAX(Id) FROM Offers")
+        res = cur.fetchall()[0][0]
+        return res
 
     def update(self):
         db = get_db()

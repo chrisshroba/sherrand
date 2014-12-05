@@ -227,10 +227,12 @@ def request_add():
             "start_time": request.form["start_time"],
             "end_time": request.form["end_time"],
             "origin": {
+                "name": request.form["origin_name"],
                 "lat": request.form["origin_lat"],
                 "lng": request.form["origin_lon"]
             },
             "destination": {
+                "name": request.form["dest_name"],
                 "lat": request.form["dest_lat"],
                 "lng": request.form["dest_lon"]
             }
@@ -261,10 +263,18 @@ def offer_get_with_id(offer_id):
 @app.route('/offers/<int:offer_id>', methods=['POST'])
 def offer_get_with_id_post(offer_id):
     offer = RideOffer.get_with_id(offer_id)
-    offerer_phone_number = offer.user.get("user_id")
-    user_phone_number = session["user"]["id"]
+    driver = offer["user_id"]
+    requester = session["user"]["id"]
 
-    url = "http://shroba.io:4656/setupProxy?num1=%s&num2=%s" % (user_phone_number, offerer_phone_number)
+    db = get_db()
+    cur = db.cursor()
+    cur.execute("SELECT phone FROM Users WHERE id=%s", [driver])
+    driver_phone = cur.fetchall()[0][0]
+    cur = db.cursor()
+    cur.execute("SELECT phone FROM Users WHERE id=%s", [requester])
+    requester_phone = cur.fetchall()[0][0]
+
+    url = "http://shroba.io:4656/setupProxy?num1=%s&num2=%s" % (requester_phone, driver_phone)
     make_proxy = urllib2.urlopen(url).open()
 
     return render_template('ride_info.html', offer=offer)
@@ -291,40 +301,30 @@ def offer_delete(offer_id):
 
 @app.route('/api/offers', methods=['POST'])
 def offer_add():
-    title = request.form["title"]
-    user = session["user"]["id"]
-    max_seat = request.form["max_seat"]
-    open_seat = int(max_seat) - 1
-    date = request.form["date"]
-    start_time = request.form["start_time"]
-    end_time = request.form["end_time"]
-    origin_name = request.form["origin_name"]
-    origin_lat = request.form["origin_lat"]
-    origin_lon = request.form["origin_lon"]
-    dest_name = request.form["dest_name"]
-    dest_lat = request.form["dest_lat"]
-    dest_lon = request.form["dest_lon"]
-    
-    db = get_db()
-    cur = db.cursor()
-    q = """
-        INSERT INTO Offers (Title, User, MaxSeats, OpenSeats, Date, StartTime, EndTime, OriginName, OriginLat, OriginLng,  DestinationName, DestinationLat, DestinationLng )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """
-    cur.execute(q, (title, user, max_seat, open_seat, date,start_time, end_time, origin_name, origin_lat, origin_lon, dest_name, dest_lat, dest_lon))
-
-    q = "SELECT * FROM Offers"
-    cur.execute(q)
-    res = cur.fetchall()
-
-    db.commit()
-
-    if len(res) == 0:
-        session["ride"] = None
-    else:
-        session["ride"] = res[len(res)-1];
-
-    return redirect("/ride")
+    req = RideOffer(
+        {
+            "title": request.form["title"],
+            "user_id": session["user"]["id"],
+            "max_seats": request.form["max_seat"],
+            "open_seats": request.form["max_seat"],
+            "start_date": request.form["date"],
+            "end_date": request.form["date"],
+            "start_time": request.form["start_time"],
+            "end_time": request.form["end_time"],
+            "origin": {
+                "name": request.form["origin_name"],
+                "lat": request.form["origin_lat"],
+                "lng": request.form["origin_lon"]
+            },
+            "destination": {
+                "name": request.form["dest_name"],
+                "lat": request.form["dest_lat"],
+                "lng": request.form["dest_lon"]
+            }
+        }
+    )
+    res = req.insert()
+    return redirect("/offers/" + str(res))
 
 @app.before_request
 def before_request():

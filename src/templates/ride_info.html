@@ -4,9 +4,9 @@
 <div class="contentwapper">
     <div class="instruction"> Ride Info</div>
     <div class="well well-lg">
-        <h3>{{ session.ride[1] }}</h3>
-        <p>From {{ session.ride[5] }} to {{ session.ride[6] }}</p>
-        <p>Seats: {{ session.ride[4] }} / {{ session.ride[3] }} available</p>
+        <h3>{{ offer.title }}</h3>
+        <p>From {{ offer.origin.name }} to {{ offer.destination.name }}</p>
+        <p>Seats: {{ offer.max_seats }} / {{ offer.open_seats }} available</p>
                 <div id="map-canvas"></div>
     </div>
     <div id="button-group">
