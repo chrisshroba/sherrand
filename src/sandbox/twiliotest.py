@@ -30,7 +30,7 @@ def get_random_number():
 def setup_number_proxy(num1, num2):
     ret_num = None
     for number in numbers:
-        if num1 not in number_maps[number]:
+        if num1 not in number_maps[number] and num2 not in number_maps[number]:
             number_maps[number][num1] = num2
             number_maps[number][num2] = num1
             ret_num = number
@@ -42,10 +42,10 @@ def setup_number_proxy(num1, num2):
 #print "Number: %s" % setup_number_proxy(chris,     serin)
 
 ## TEST SETUP
-print "Chris and Marie: %s" % setup_number_proxy(chris, marie)
-print "Chris and Chris: %s" % setup_number_proxy(chris, chris)
-print "Chris and Alexandra: %s" % setup_number_proxy(chris, alexandra)
-print "Chris and serin: %s" % setup_number_proxy(chris, serin)
+# print "Chris and Marie: %s" % setup_number_proxy(chris, marie)
+# print "Chris and Chris: %s" % setup_number_proxy(chris, chris)
+# print "Chris and Alexandra: %s" % setup_number_proxy(chris, alexandra)
+# print "Chris and serin: %s" % setup_number_proxy(chris, serin)
 
 
 
@@ -83,6 +83,38 @@ def new_message():
 
 
 
+@app.route("/setupProxy")
+def setupProxyRoute():
+    num1 = request.args.get("num1")
+    num2 = request.args.get("num2")
+    if num1[0]=="1":
+        num1="+"+num1
+    else:
+        num1="+1"+num1
+
+    if num2[0]=="1":
+        num2="+"+num2
+    else:
+        num2="+1"+num2
+
+
+    ret = setup_number_proxy(num1, num2)
+    if ret is not None:
+        client.messages.create(
+            to=num1,
+            from_=ret,
+            body="Reply to this message to chat!",
+            )
+        return "Successful"
+
+    return"Failed"
+
+@app.route("/reset")
+def resetRoute():
+    number_maps = {}
+    for number in numbers:
+        number_maps[number] = {}
+    return "Done resetting."
 
 app.run(host="0.0.0.0", debug=True, port=4555)
 

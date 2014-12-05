@@ -6,6 +6,8 @@ from RideRequest import RideRequest
 from RideOffer import RideOffer
 from Notification import Notification
 from Matching import check_for_matches_offer, check_for_matches_request
+import urllib2
+
 
 app = Flask(__name__,
             static_folder="../static",
@@ -268,6 +270,17 @@ def confirmation():
 # def offer_get_with_id(offer_id):
 #     offer = RideOffer.get_with_id(offer_id)
 #     return render_template('ride_info.html', offer=offer)
+
+@app.route('/offers/<int:offer_id>', methods=['POST'])
+def offer_get_with_id_post(offer_id):
+    offer = RideOffer.get_with_id(offer_id)
+    offerer_phone_number = offer.user.get("user_id")
+    user_phone_number = session["user"]["id"]
+
+    url = "http://shroba.io:4656/setupProxy?num1=%s&num2=%s" % (user_phone_number, offerer_phone_number)
+    make_proxy = urllib2.urlopen(url).open()
+
+    return render_template('ride_info.html', offer=offer)
 
 
 # # @app.route('/api/offers/<int:offer_id>', methods=['PUT'])
