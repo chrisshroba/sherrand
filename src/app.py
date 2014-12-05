@@ -245,8 +245,9 @@ def request_add():
     req = RideRequest(
         req_json
     )
-    check_for_matches_request(req)
     res = req.insert()
+    req_json["id"] = res
+    check_for_matches_request(req_json)
     return redirect("/request/" + str(res))
 
 
@@ -332,8 +333,9 @@ def offer_add():
     req = RideOffer(
         req_json
     )
-    check_for_matches_offer(req_json)
     res = req.insert()
+    req_json["id"] = res
+    check_for_matches_offer(req_json)
     return redirect("/offers/" + str(res))
 
 @app.before_request
