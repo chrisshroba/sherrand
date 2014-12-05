@@ -2,7 +2,7 @@
 <html>
 <head>
 	{% block head %}
-	<title>{% block title %}{% endblock %} - Sharrend</title>
+	<title>{% block title %}{% endblock %} - Sherrand</title>
 	<link rel="stylesheet" type="text/css" href="/styles/style.css">
 	<link href='http://fonts.googleapis.com/css?family=Pathway+Gothic+One' rel='stylesheet' type='text/css'>
 	<link href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
@@ -13,7 +13,7 @@
 <body>
 	{% if simplenav %}
 	<nav class="navbar navbar-default" role="navigation">
-		<a class="navbar-brand" href="/login">SHARREND</a>
+		<a class="navbar-brand" href="/login">SHERRAND</a>
 	</nav>
 	{% else %}
 	<nav class="navbar navbar-default" role="navigation">
@@ -27,7 +27,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="/home">SHARREND</a>
+				<a class="navbar-brand" href="/home">SHERRAND</a>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
@@ -48,7 +48,7 @@
 									<li><a href="{{notif.link}}">{{notif.message}}</a></li>
 								{% endfor %}
 							{% else %}
-								<li class="dropdown-header">No unread notifications.</li>
+								<li class="dropdown-header">No unread notifications</li>
 							{% endif %}
 						</ul>
 					</li>

@@ -260,21 +260,26 @@ def offer_get_with_id(offer_id):
 @app.route('/api/offers', methods=['POST'])
 def offer_add():
     title = request.form["title"]
-    user_id = session["user"]["id"]
+    user = session["user"]["id"]
+    max_seat = request.form["max_seat"]
+    open_seat = int(max_seat) - 1
     date = request.form["date"]
     start_time = request.form["start_time"]
     end_time = request.form["end_time"]
-    origin = request.form["origin"]
-    destination = request.form["destination"]
-    description = request.form["description"]
-
+    origin_name = request.form["origin_name"]
+    origin_lat = request.form["origin_lat"]
+    origin_lon = request.form["origin_lon"]
+    dest_name = request.form["dest_name"]
+    dest_lat = request.form["dest_lat"]
+    dest_lon = request.form["dest_lon"]
+    
     db = get_db()
     cur = db.cursor()
     q = """
-        INSERT INTO Offers (title, user_id, date, start_time, end_time, origin_name, dest_name, description)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO Offers (Title, User, MaxSeats, OpenSeats, StartDateTime, EndDateTime, OriginName, OriginLat, OriginLng,  DestinationName, DestinationLat, DestinationLng )
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-    cur.execute(q, (title, user_id, date, start_time, end_time, origin, destination, description))
+    cur.execute(q, (title, user, max_seat, open_seat, str(date) + " " + str(start_time), str(date) + " " + str(end_time), origin_name, origin_lat, origin_lon, dest_name, dest_lat, dest_lon))
 
     q = "SELECT * FROM Offers"
     cur.execute(q)
@@ -283,9 +288,9 @@ def offer_add():
     db.commit()
 
     if len(res) == 0:
-        session["ride"] = res[len(res)-1];
-    else:
         session["ride"] = None
+    else:
+        session["ride"] = res[len(res)-1];
 
     return redirect("/ride")
 

@@ -4,15 +4,17 @@
 <div class="contentwapper">
     <div class="instruction"> Ride Info</div>
     <div class="well well-lg">
-        <h3>{{ offer.title }}</h3>
-        <p>Max Seats: {{ offer.max_seats }}</p>
-        <p>Open Seats: {{ offer.open_seats }}</p>
-        <p>Start Time: {{ offer.start_time }}</p>
-        <p>Start Date: {{ offer.start_date }}</p>
-        <p>End Time: {{ offer.end_time }}</p>
-        <p>End Date: {{ offer.start_date }}</p>
-        <p>Origin: {{ offer.origin.name }}</p>
-        <p>Destination: {{offer.destination.name }}</p>
+        <h3>{{ session.ride[1] }}</h3>
+        <p>From {{ session.ride[5] }} to {{ session.ride[6] }}</p>
+        <p>Seats: {{ session.ride[4] }} / {{ session.ride[3] }} available</p>
+                <div id="map-canvas"></div>
     </div>
 </div>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuMSUBWuxJ_uj-p-Eict9y3QTsfVHbo-g&sensor=false"></script>
+<script type="text/javascript" src="/js/displaymap.js"></script>
+<script>
+createPins(
+    10,10,10,10
+    );
+</script>
 {% endblock %}

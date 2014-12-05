@@ -40,6 +40,11 @@
     padding: 20px;
 }
 
+#map-canvas {
+  height: 500px;
+  width:  500px;
+}
+
 /*img {
     position: absolute;
     clip: rect(0px,100px,100px,0px);

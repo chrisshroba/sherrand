@@ -1,4 +1,5 @@
     var from_state=true;
+    var from_state=true;
     var from_lat, from_lon;
     var to_lat, to_lon;
     function initialize() {
@@ -28,7 +29,7 @@
 
 
         google.maps.event.addListener(map, 'click', function(event) {
-            from_state = $("#myonoffswitch").is(':checked')
+            from_state = $("#myonoffswitch").is(':checked');
             if(from_state)
             {
                 if (!fromMarkerAdded) {
@@ -80,7 +81,5 @@
             from_lon: from_lon,
             to_lat: to_lat,
             to_lon: to_lon
-        }
+        };
     }
-
-    //This is the latest
