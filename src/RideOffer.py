@@ -139,8 +139,8 @@ class RideOffer():
                 Offers.DestinationName,
                 Offers.DestinationLat,
                 Offers.DestinationLng,
-                Users.FirstName,
-                Users.LastName
+                Users.first_name,
+                Users.last_name
             FROM Offers
             JOIN Users
             ON Users.Id=Offers.User
