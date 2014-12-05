@@ -150,7 +150,7 @@ class RideOffer():
         resp = RideOffer.sql_response_to_json(fetch)
         resp["first_name"] = fetch[13]
         resp["last_name"] = fetch[14]
-        return
+        return resp
 
     @staticmethod
     def sql_response_to_json(s):
