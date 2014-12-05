@@ -90,12 +90,9 @@ def logout():
 @is_public
 @app.route("/home", methods=["GET"])
 def home_page():
-<<<<<<< HEAD
-=======
     update_notifications()
     arr = ["1", "2"]
     # sessions["events"] = arr#= lookup_events()
->>>>>>> 5a1c1a8752ccfe365e68944bde2e21bf7f8ff8f3
     return render_template("home.html")
 
 @is_public
