@@ -253,6 +253,7 @@ def request_add():
 
 @app.route('/request/<int:request_id>')
 def confirmation(request_id):
+    update_notifications()
     ride = RideRequest.get_with_id(request_id)
     return render_template('request_info.html', ride=ride)
 
@@ -265,6 +266,7 @@ def confirmation(request_id):
 
 @app.route('/offers/<int:offer_id>', methods=['GET'])
 def offer_get_with_id(offer_id):
+    update_notifications()
     offer = RideOffer.get_with_id(offer_id)
     return render_template('ride_info.html', offer=offer)
 
