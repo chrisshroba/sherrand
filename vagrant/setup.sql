@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS Requests
   DestinationLng FLOAT(10, 6) NOT NULL,
   PRIMARY KEY (Id)
 );
+
 CREATE TABLE IF NOT EXISTS Offers
 (
   Id MEDIUMINT NOT NULL AUTO_INCREMENT,
@@ -36,6 +37,7 @@ CREATE TABLE IF NOT EXISTS Offers
   DestinationLng FLOAT(10, 6) NOT NULL,
   PRIMARY KEY (Id)
 );
+
 CREATE TABLE IF NOT EXISTS Users 
 (
   id MEDIUMINT NOT NULL AUTO_INCREMENT,
@@ -49,17 +51,17 @@ CREATE TABLE IF NOT EXISTS Users
   photo varchar(40) DEFAULT NULL,
   driver_rating double DEFAULT 0,
   passenger_rating double DEFAULT 0,
-  PRIMARY KEY (Id)
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS Rides 
 (
   id MEDIUMINT NOT NULL AUTO_INCREMENT,
   offer_id int NOT NULL,
-  PRIMARY KEY (Id)
+  PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS Passangers 
+CREATE TABLE IF NOT EXISTS Passengers 
 (
   user_id int NOT NULL,
   ride_id int NOT NULL,
