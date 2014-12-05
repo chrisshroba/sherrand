@@ -144,7 +144,7 @@ class RideOffer():
             FROM Offers
             JOIN Users
             ON Users.Id=Offers.User
-            WHERE Id=%s
+            WHERE Offers.Id=%s
             """, [offer_id])
         fetch = cur.fetchall()[0]
         resp = RideOffer.sql_response_to_json(fetch)
