@@ -10,6 +10,11 @@ class Notification():
         self.is_read = is_read
 
     @staticmethod
+    def add_new(user_id, message, link):
+        notif = Notification(user_id, message, link, False)
+        notif.insert()
+
+    @staticmethod
     def get_all():
         db = get_db()
         cur = db.cursor()
@@ -23,6 +28,25 @@ class Notification():
                 id
             FROM Notifications
             """)
+        response_list = map(Notification.from_sql_response, cur.fetchall())
+        return response_list
+
+    @staticmethod
+    def get_unread_by_user_id(user_id):
+        db = get_db()
+        cur = db.cursor()
+        cur.execute(
+            """
+            SELECT
+                user_id,
+                message,
+                link,
+                is_read,
+                id
+            FROM Notifications WHERE user_id=%s AND is_read=FALSE
+            """,
+            [user_id]
+        )
         response_list = map(Notification.from_sql_response, cur.fetchall())
         return response_list
 
@@ -44,7 +68,13 @@ class Notification():
 
     @staticmethod
     def from_sql_response(s):
-        return Notification(s[0], s[1], s[2], s[3], s[5])
+        return {
+            "user_id": s[0],
+            "message": s[1],
+            "link": s[2],
+            "is_read": s[3],
+            "id": s[4]
+        }
 
     def insert(self):
         db = get_db()

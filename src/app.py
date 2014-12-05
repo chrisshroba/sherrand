@@ -4,6 +4,7 @@ from mysql import get_db, teardown_db
 from jsonschema import validate, ValidationError
 from RideRequest import RideRequest
 from RideOffer import RideOffer
+from Notification import Notification
 
 app = Flask(__name__,
             static_folder="../static",
@@ -62,6 +63,9 @@ def login():
     
     session["user"] = user
     if user:
+        notifs = Notification.get_unread_by_user_id(user["id"])
+        session["notifications"] = notifs
+        session["has_unread"] = len(notifs) > 0
         return redirect("/home")
     else:
         print "here"
@@ -115,10 +119,10 @@ def create_account():
     return redirect("/login")
 
 
-# def message_response(code, message):
-#     response = jsonify({"message": message})
-#     response.status_code = code
-#     return response
+def message_response(code, message):
+    response = jsonify({"message": message})
+    response.status_code = code
+    return response
 
 @app.route('/ride')
 def ride_info():
