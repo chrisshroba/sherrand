@@ -148,7 +148,7 @@ class RideRequest():
               DestinationName,
               DestinationLat,
               DestinationLng
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 self.user_id,
@@ -187,7 +187,6 @@ class RideRequest():
             WHERE Id=%s
             """,
             (
-                self.title,
                 self.user_id,
                 format_date(self.start_date, self.start_time),
                 format_date(self.end_date, self.end_time),
