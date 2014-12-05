@@ -82,7 +82,12 @@ def new_message():
     return "Success"
 
 
-
+@app.route("/reset")
+def resetRoute():
+    number_maps = {}
+    for number in numbers:
+        number_maps[number] = {}
+    return "Done resetting."
 
 app.run(host="0.0.0.0", debug=True, port=4555)
 
