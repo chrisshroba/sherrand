@@ -105,11 +105,12 @@ def signup():
 @is_public
 @app.route("/api/signup", methods=["POST"])
 def create_account():
-    first_name = request.form.get("first_name") if "first_name" in request.form else session.user.first_name
-    last_name = request.form.get("last_name") if "last_name" in request.form else session.user.last_name
-    password = request.form.get("password") if "password" in request.form else session.user.password
-    phone = request.form.get("phone") if "phone" in request.form else session.user.phone
-    email = request.form.get("email") if "email" in request.form else session.user.email
+    first_name = request.form.get("first_name")
+    last_name = request.form.get("last_name")
+    username = request.form.get("username")
+    password = request.form.get("password")
+    phone = request.form.get("phone")
+    email = request.form.get("email")
 
     db = get_db()
     cur = db.cursor()
@@ -157,19 +158,23 @@ def edit_profile():
     phone = request.form.get("phone") if "phone" in request.form else session["user"]["phone"]
     email = request.form.get("email") if "email" in request.form else session["user"]["email"]
 
-    return session["user"]["first_name"]
     db = get_db()
     cur = db.cursor()
     q = """
-        UPDATE mytable
+        UPDATE Users
             SET first_name = %s,
-                column2 = value2
-    WHERE key_value = some_value;
+                last_name = %s,
+                password = PASSWORD(%s), 
+                phone = %s, 
+                email = %s
+        WHERE id = %s;
         """
-    # print q
-    res = cur.execute(q, (first_name, last_name, username, password, phone, email))
+    res = cur.execute(q, (first_name, last_name, password, phone, email, session["user"]["id"]))
     db.commit()
-    # print res
+
+    user = lookup_user(session["user"]["username"], password)
+    
+    session["user"] = user
     
     session["feedback"] = "Account successfully created"
     session["feedback_code"] = "success"
