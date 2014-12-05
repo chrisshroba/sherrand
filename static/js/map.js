@@ -4,8 +4,8 @@
     function initialize() {
 
         var mapOptions = {
-            center: new google.maps.LatLng(40,-100),
-            zoom: 4
+            center: new google.maps.LatLng(40.109329,-88.227392),
+            zoom: 15
         };
 
         var markerAdded = false;

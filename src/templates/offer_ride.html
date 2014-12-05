@@ -24,21 +24,48 @@
             <div class="input-group">
                 <input class="form-control" id="ride-start-time" type="time" name="start_time">
                 <span class="input-group-addon">To</span>
-                <input class="form-control" id="ride-start-time" type="time" name="end_time">
+                <input class="form-control" id="ride-end-time" type="time" name="end_time">
+            </div>
+        </p>
+
+                <div id="map-canvas" style="height: 500px;width:  500px"></div>
+        <div class="onoffswitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked="true">
+            <label class="onoffswitch-label" for="myonoffswitch">
+                <span class="onoffswitch-inner"></span>
+                <span class="onoffswitch-switch"></span>
+            </label>
+        </div>
+        </p>
+                <div id="hiding-these" hidden>
+        <p>
+            <div class="input-group">
+                <span class="input-group-addon">From latitude</span>
+                <input class="form-control" id="ride-origin-lat" type="text" name="origin_lat">
             </div>
         </p>
         <p>
             <div class="input-group">
-                <span class="input-group-addon">From</span>
-                <input class="form-control" id="ride-origin" type="text" name="origin">
+                <span class="input-group-addon">From longitude</span>
+                <input class="form-control" id="ride-origin-lon" type="text" name="origin_lon">
+            </div>
+        </p>
+
+        <p>
+            <div class="input-group">
+                <span class="input-group-addon">To latitude</span>
+                <input class="form-control" id="ride-destination-lat" type="text" name="dest_lat">
             </div>
         </p>
         <p>
             <div class="input-group">
-                <span class="input-group-addon">To</span>
-                <input class="form-control" id="ride-destination" type="text" name="destination">
+                <span class="input-group-addon">To longitude</span>
+                <input class="form-control" id="ride-destination-lon" type="text" name="dest_lon">
             </div>
         </p>
+        </div>
+
+
         <p>
             <div class="input-group">
                 <textarea class="form-control" id="ride-description" rows="3" name="description" placeholder="Description"></textarea>
@@ -51,4 +78,10 @@
         </div>
     </form>
 </div>
+
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuMSUBWuxJ_uj-p-Eict9y3QTsfVHbo-g&sensor=false"></script>
+<link href='/styles/togglebutton.css' rel='stylesheet' type='text/css'>
+
+<script src="/js/map.js"></script>
+
 {% endblock %}
