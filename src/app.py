@@ -224,26 +224,28 @@ def request_delete(request_id):
 
 @app.route('/api/requests', methods=['POST'])
 def request_add():
-    req = RideRequest(
-        {
-            "user_id": session["user"]["id"],
-            "title": "Ride Request",
-            "start_date": request.form["date"],
-            "end_date": request.form["date"],
-            "start_time": request.form["start_time"],
-            "end_time": request.form["end_time"],
-            "origin": {
-                "name": request.form["origin_name"],
-                "lat": request.form["origin_lat"],
-                "lng": request.form["origin_lon"]
-            },
-            "destination": {
-                "name": request.form["dest_name"],
-                "lat": request.form["dest_lat"],
-                "lng": request.form["dest_lon"]
-            }
+    req_json = {
+        "user_id": session["user"]["id"],
+        "title": "Ride Request",
+        "start_date": request.form["date"],
+        "end_date": request.form["date"],
+        "start_time": request.form["start_time"],
+        "end_time": request.form["end_time"],
+        "origin": {
+            "name": request.form["origin_name"],
+            "lat": request.form["origin_lat"],
+            "lng": request.form["origin_lon"]
+        },
+        "destination": {
+            "name": request.form["dest_name"],
+            "lat": request.form["dest_lat"],
+            "lng": request.form["dest_lon"]
         }
+    }
+    req = RideRequest(
+        req_json
     )
+    check_for_matches_request(req)
     res = req.insert()
     return redirect("/request/" + str(res))
 
@@ -307,28 +309,30 @@ def offer_delete(offer_id):
 
 @app.route('/api/offers', methods=['POST'])
 def offer_add():
-    req = RideOffer(
-        {
-            "title": request.form["title"],
-            "user_id": session["user"]["id"],
-            "max_seats": request.form["max_seat"],
-            "open_seats": request.form["max_seat"],
-            "start_date": request.form["date"],
-            "end_date": request.form["date"],
-            "start_time": request.form["start_time"],
-            "end_time": request.form["end_time"],
-            "origin": {
-                "name": request.form["origin_name"],
-                "lat": request.form["origin_lat"],
-                "lng": request.form["origin_lon"]
-            },
-            "destination": {
-                "name": request.form["dest_name"],
-                "lat": request.form["dest_lat"],
-                "lng": request.form["dest_lon"]
-            }
+    req_json = {
+        "title": request.form["title"],
+        "user_id": session["user"]["id"],
+        "max_seats": request.form["max_seat"],
+        "open_seats": request.form["max_seat"],
+        "start_date": request.form["date"],
+        "end_date": request.form["date"],
+        "start_time": request.form["start_time"],
+        "end_time": request.form["end_time"],
+        "origin": {
+            "name": request.form["origin_name"],
+            "lat": request.form["origin_lat"],
+            "lng": request.form["origin_lon"]
+        },
+        "destination": {
+            "name": request.form["dest_name"],
+            "lat": request.form["dest_lat"],
+            "lng": request.form["dest_lon"]
         }
+    }
+    req = RideOffer(
+        req_json
     )
+    check_for_matches_offer(req_json)
     res = req.insert()
     return redirect("/offers/" + str(res))
 
