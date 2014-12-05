@@ -51,7 +51,7 @@ def check_for_matches_request(new_request):
     )
     results = cur.fetchall()
     for res in results:
-        Notification.add_new(new_request["user_id"], "New ride offer available to " + dest_name + "!", "/offer/" + str(res[0]))
+        Notification.add_new(new_request["user_id"], "New ride offer available to " + dest_name + "!", "/offers/" + str(res[0]))
 
 
 def check_for_matches_offer(new_offer):
@@ -102,4 +102,4 @@ def check_for_matches_offer(new_offer):
     )
     results = cur.fetchall()
     for res in results:
-        Notification.add_new(res[0], "New ride offer available to " + dest_name + "!", "/offer/" + str(new_offer["id"]))
+        Notification.add_new(res[0], "New ride offer available to " + dest_name + "!", "/offers/" + str(new_offer["id"]))

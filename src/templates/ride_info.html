@@ -4,17 +4,15 @@
 <div class="contentwapper">
     <div class="instruction"> Ride Info</div>
     <div class="well well-lg">
-        <p>Title: {{ session.ride[1] }}</p>
-        <p>Date: {{ session.ride[5] }}</p>
-        <p>Time: from {{ session.ride[6] }} to {{ session.ride[7] }}</p>
-        <p>Availbility: {{ session.ride[4] }} / {{ session.ride[3] }} </p>
-        <!-- <p>Origin: {{ session.ride[] }}</p>
-        <p>Title: {{ session.ride[1] }}</p>
-        <p>Title: {{ session.ride[1] }}</p>
-        <p>Title: {{ session.ride[1] }}</p>
-        <p>Title: {{ session.ride[1] }}</p>
-        <p>Title: {{ session.ride[1] }}</p>
-        <p>Title: {{ session.ride[1] }}</p> -->
+        <p>Title: {{ offer.title }}</p>
+        <p>Max Seats: {{offer.max_seats}}</p>
+        <p>Open Seats: {{offer.open_seats}}</p>
+        <p>Start Time: {{offer.start_time}}</p>
+        <p>Start Date: {{offer.start_date}}</p>
+        <p>End Time: {{offer.end_time}}</p>
+        <p>End Date: {{offer.start_date}}</p>
+        <p>Origin: {{offer.origin.name}}</p>
+        <p>Destination: {{offer.destination.name}}</p>
     </div>
 </div>
 {% endblock %}

@@ -225,10 +225,10 @@ def confirmation():
 #     return jsonify({"offer_list": RideOffer.get_all()})
 
 
-@app.route('/api/offers/<int:offer_id>', methods=['GET'])
+@app.route('/offers/<int:offer_id>', methods=['GET'])
 def offer_get_with_id(offer_id):
-    # return jsonify(RideOffer.get_with_id(offer_id))
-    return render_template('ride_info.html')
+    offer = RideOffer.get_with_id(offer_id)
+    return render_template('ride_info.html', offer=offer)
 
 
 # @app.route('/api/offers/<int:offer_id>', methods=['PUT'])
