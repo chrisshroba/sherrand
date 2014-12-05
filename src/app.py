@@ -4,6 +4,8 @@ from mysql import get_db, teardown_db
 from jsonschema import validate, ValidationError
 from RideRequest import RideRequest
 from RideOffer import RideOffer
+from Notification import Notification
+from Matching import check_for_matches_offer, check_for_matches_request
 
 app = Flask(__name__,
             static_folder="../static",
@@ -14,9 +16,18 @@ app.debug = True
 
 public_routes = []
 
+
 def is_public(fn):
     public_routes.append(fn)
     return fn
+
+
+def update_notifications():
+    user = session["user"] if "user" in session else None
+    if user:
+        notifs = Notification.get_unread_by_user_id(user["id"])
+        session["notifications"] = notifs
+        session["has_unread"] = len(notifs) > 0
 
 @app.route('/')
 def root():
@@ -79,6 +90,12 @@ def logout():
 @is_public
 @app.route("/home", methods=["GET"])
 def home_page():
+<<<<<<< HEAD
+=======
+    update_notifications()
+    arr = ["1", "2"]
+    # sessions["events"] = arr#= lookup_events()
+>>>>>>> 5a1c1a8752ccfe365e68944bde2e21bf7f8ff8f3
     return render_template("home.html")
 
 @is_public
@@ -113,26 +130,30 @@ def create_account():
     return redirect("/login")
 
 
-# def message_response(code, message):
-#     response = jsonify({"message": message})
-#     response.status_code = code
-#     return response
+def message_response(code, message):
+    response = jsonify({"message": message})
+    response.status_code = code
+    return response
 
 @app.route('/ride')
 def ride_info():
+    update_notifications()
     return render_template('ride_info.html')
 
 @app.route('/profile')
 def profile():
+    update_notifications()
     return render_template('profile.html')
 
 @app.route('/request')
 def request_ride():
+    update_notifications()
     return render_template('request_ride.html')
 
 
 @app.route('/offer')
 def offer_ride():
+    update_notifications()
     return render_template('offer_ride.html')
 
 
@@ -271,6 +292,7 @@ def before_request():
         print "uh oh"
         print request.endpoint
         return redirect("/login")
+
 
 def lookup_events():
     db = get_db()

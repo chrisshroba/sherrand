@@ -6,6 +6,7 @@ class RideRequest():
         "type": "object",
         "properties": {
             "title": {"type": ["string", "null"]},
+            "user_id": {"type": "number"},
             "start_time": {"type": "string"},
             "start_date": {"type": "string"},
             "end_time": {"type": "string"},
@@ -29,12 +30,13 @@ class RideRequest():
                 "required": ["lat", "lng"]
             }
         },
-        "required": ["start_time", "start_date", "end_time", "end_date", "origin", "destination"]
+        "required": ["user_id", "start_time", "start_date", "end_time", "end_date", "origin", "destination"]
     }
 
     def __init__(self, j):
         self.id = j["id"] if "id" in j else None
         self.title = j["title"] if "title" in j else None
+        self.user_id = j["user_id"]
         self.start_time = j["start_time"]
         self.start_date = j["start_date"]
         self.end_time = j["end_time"]
@@ -53,6 +55,7 @@ class RideRequest():
     def to_json_object(self):
         return {
             "title": self.title,
+            "user_id": self.user_id,
             "start_time": self.start_time,
             "start_date": self.start_date,
             "end_time": self.end_time,
@@ -70,6 +73,7 @@ class RideRequest():
             SELECT
                 Id,
                 Title,
+                User,
                 StartDateTime,
                 EndDateTime,
                 OriginName,
@@ -91,6 +95,7 @@ class RideRequest():
             """
             SELECT
                 Id,
+                User,
                 Title,
                 StartDateTime,
                 EndDateTime,
@@ -110,19 +115,20 @@ class RideRequest():
         return {
             "id": s[0],
             "title": s[1],
-            "start_time": str(s[2].time()),
-            "start_date": str(s[2].date()),
-            "end_time": str(s[3].time()),
-            "end_date": str(s[3].date()),
+            "user_id": s[2],
+            "start_time": str(s[3].time()),
+            "start_date": str(s[3].date()),
+            "end_time": str(s[4].time()),
+            "end_date": str(s[4].date()),
             "origin": {
-                "name": s[4],
-                "lat": s[5],
-                "lng": s[6]
+                "name": s[5],
+                "lat": s[6],
+                "lng": s[7]
             },
             "destination": {
-                "name": s[7],
-                "lat": s[8],
-                "lng": s[9]
+                "name": s[8],
+                "lat": s[9],
+                "lng": s[10]
             }
         }
     @staticmethod
@@ -136,6 +142,7 @@ class RideRequest():
             """
             INSERT INTO Requests (
               Title,
+              User,
               StartDateTime,
               EndDateTime,
               OriginName,
@@ -144,10 +151,11 @@ class RideRequest():
               DestinationName,
               DestinationLat,
               DestinationLng
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 self.title,
+                self.user_id,
                 format_date(self.start_date, self.start_time),
                 format_date(self.end_date, self.end_time),
                 self.origin["name"],
@@ -168,6 +176,7 @@ class RideRequest():
             UPDATE Requests
             SET
               Title=%s,
+              User=%s,
               StartDateTime=%s,
               EndDateTime=%s,
               OriginName=%s,
@@ -180,6 +189,7 @@ class RideRequest():
             """,
             (
                 self.title,
+                self.user_id,
                 format_date(self.start_date, self.start_time),
                 format_date(self.end_date, self.end_time),
                 self.origin["name"],

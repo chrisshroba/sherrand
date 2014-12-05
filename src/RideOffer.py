@@ -6,6 +6,7 @@ class RideOffer():
         "type": "object",
         "properties": {
             "title": {"type": ["string", "null"]},
+            "user_id": {"type": "number"},
             "max_seats": {"type": "number"},
             "open_seats": {"type": "number"},
             "start_time": {"type": "string"},
@@ -31,12 +32,13 @@ class RideOffer():
                 "required": ["lat", "lng"]
             }
         },
-        "required": ["start_time", "start_date", "end_time", "end_date", "origin", "destination"]
+        "required": ["user_id", "start_time", "start_date", "end_time", "end_date", "origin", "destination"]
     }
 
     def __init__(self, j):
         self.id = j["id"] if "id" in j else None
         self.title = j["title"] if "title" in j else None
+        self.user_id = j["user_id"]
         self.max_seats = j["max_seats"]
         self.open_seats = j["open_seats"]
         self.start_time = j["start_time"]
@@ -57,6 +59,7 @@ class RideOffer():
     def to_json_object(self):
         return {
             "title": self.title,
+            "user_id": self.user_id,
             "max_seats": self.max_seats,
             "open_seats": self.open_seats,
             "start_time": self.start_time,
@@ -76,6 +79,7 @@ class RideOffer():
             SELECT
                 Id,
                 Title,
+                User,
                 MaxSeats,
                 OpenSeats,
                 StartDateTime,
@@ -100,6 +104,7 @@ class RideOffer():
             SELECT
                 Id,
                 Title,
+                User,
                 MaxSeats,
                 OpenSeats,
                 StartDateTime,
@@ -119,21 +124,22 @@ class RideOffer():
         return {
             "id": s[0],
             "title": s[1],
-            "max_seats": s[2],
-            "open_seats": s[3],
-            "start_time": str(s[4].time()),
-            "start_date": str(s[4].date()),
-            "end_time": str(s[5].time()),
-            "end_date": str(s[5].date()),
+            "user_id": s[2],
+            "max_seats": s[3],
+            "open_seats": s[4],
+            "start_time": str(s[5].time()),
+            "start_date": str(s[5].date()),
+            "end_time": str(s[6].time()),
+            "end_date": str(s[6].date()),
             "origin": {
-                "name": s[6],
-                "lat": s[7],
-                "lng": s[8]
+                "name": s[7],
+                "lat": s[8],
+                "lng": s[9]
             },
             "destination": {
-                "name": s[9],
-                "lat": s[10],
-                "lng": s[11]
+                "name": s[10],
+                "lat": s[11],
+                "lng": s[12]
             }
         }
 
@@ -148,6 +154,7 @@ class RideOffer():
             """
             INSERT INTO Offers (
               Title,
+              User,
               MaxSeats,
               OpenSeats,
               StartDateTime,
@@ -158,10 +165,11 @@ class RideOffer():
               DestinationName,
               DestinationLat,
               DestinationLng
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 self.title,
+                self.user_id,
                 self.max_seats,
                 self.open_seats,
                 format_date(self.start_date, self.start_time),
@@ -184,6 +192,7 @@ class RideOffer():
             UPDATE Offers
             SET
               Title=%s,
+              User=%s,
               MaxSeats=%s,
               OpenSeats=%s,
               StartDateTime=%s,
@@ -198,6 +207,7 @@ class RideOffer():
             """,
             (
                 self.title,
+                self.user_id,
                 self.max_seats,
                 self.open_seats,
                 format_date(self.start_date, self.start_time),
