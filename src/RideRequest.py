@@ -72,7 +72,6 @@ class RideRequest():
             """
             SELECT
                 Id,
-                Title,
                 User,
                 StartDateTime,
                 EndDateTime,
@@ -96,7 +95,6 @@ class RideRequest():
             SELECT
                 Id,
                 User,
-                Title,
                 StartDateTime,
                 EndDateTime,
                 OriginName,
@@ -141,7 +139,6 @@ class RideRequest():
         cur.execute(
             """
             INSERT INTO Requests (
-              Title,
               User,
               StartDateTime,
               EndDateTime,
@@ -154,7 +151,6 @@ class RideRequest():
             ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
-                self.title,
                 self.user_id,
                 format_date(self.start_date, self.start_time),
                 format_date(self.end_date, self.end_time),
@@ -179,7 +175,6 @@ class RideRequest():
             """
             UPDATE Requests
             SET
-              Title=%s,
               User=%s,
               StartDateTime=%s,
               EndDateTime=%s,
