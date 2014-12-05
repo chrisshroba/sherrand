@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS Requests
 (
   Id MEDIUMINT NOT NULL AUTO_INCREMENT,
   Title VARCHAR(140),
+  driver_id int(11) DEFAULT NULL,
   StartDateTime DATETIME NOT NULL,
   EndDateTime DATETIME NOT NULL,
   OriginName VARCHAR(140),
@@ -22,6 +23,7 @@ CREATE TABLE IF NOT EXISTS Offers
 (
   Id MEDIUMINT NOT NULL AUTO_INCREMENT,
   Title VARCHAR(140),
+  user_id int(11) DEFAULT NULL,
   MaxSeats INT NOT NULL,
   OpenSeats INT NOT NULL,
   StartDateTime DATETIME NOT NULL,
@@ -36,7 +38,7 @@ CREATE TABLE IF NOT EXISTS Offers
 );
 CREATE TABLE IF NOT EXISTS Users 
 (
-  Id MEDIUMINT NOT NULL AUTO_INCREMENT,
+  id MEDIUMINT NOT NULL AUTO_INCREMENT,
   username varchar(30) DEFAULT NULL,
   password varchar(160) DEFAULT NULL,
   first_name varchar(60) DEFAULT NULL,
@@ -45,14 +47,14 @@ CREATE TABLE IF NOT EXISTS Users
   email varchar(40) DEFAULT NULL,
   score int(11) DEFAULT NULL,
   photo varchar(40) DEFAULT NULL,
-  driver_rating double DEFAULT NULL,
-  passenger_rating double DEFAULT NULL,
+  driver_rating double DEFAULT 0,
+  passenger_rating double DEFAULT 0,
   PRIMARY KEY (Id)
 );
 
 CREATE TABLE IF NOT EXISTS Rides 
 (
-  Id MEDIUMINT NOT NULL AUTO_INCREMENT,
+  id MEDIUMINT NOT NULL AUTO_INCREMENT,
   offer_id int NOT NULL,
   PRIMARY KEY (Id)
 );
