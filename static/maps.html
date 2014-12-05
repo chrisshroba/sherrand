@@ -1,0 +1,35 @@
+<html>
+
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <title>CS 225 Student Summer Locator</title>
+    <link href="styles/togglebutton.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        /*html { height: 100% }*/
+        /*body { height: 100%; margin: 0; padding: 0 }*/
+        #map-canvas {
+            height: 500px;
+            width:  500px;
+        }
+
+    </style>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuMSUBWuxJ_uj-p-Eict9y3QTsfVHbo-g&sensor=false"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+    <script type="text/javascript" src="js/map.js"></script>
+</head>
+
+<body>
+    <div id="map-canvas"></div>
+    
+<div class="onoffswitch">
+    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked="true">
+    <label class="onoffswitch-label" for="myonoffswitch">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
+    </label>
+</div>
+
+</body>
+
+</html>

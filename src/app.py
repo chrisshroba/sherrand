@@ -215,6 +215,13 @@ def request_add():
 
     return redirect("/confirmation")
 
+
+@app.route('/api/offers', methods=['GET'])
+def offer_get_all():
+    return jsonify({"offer_list": RideOffer.get_all()})
+
+
+
 @app.route('/confirmation')
 def confirmation():
     return render_template('confirmation.html')
@@ -301,8 +308,6 @@ def lookup_events():
 
     if len(results) == 0:
         return None
-    else:
-        None
     return results
 
 

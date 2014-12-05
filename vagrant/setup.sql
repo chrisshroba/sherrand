@@ -90,3 +90,28 @@ VALUES ("Hello, system!");
 
 INSERT INTO Users (first_name, last_name, username, password, phone, email)
 VALUES ("asdf", "asdf", "asdf",PASSWORD("asdf"), "0000000000", "asdf@gmail.com")
+
+SELECT
+  User, (
+            3959 * acos (
+                cos ( radians(1.234) )
+                * cos( radians( lat ) )
+                * cos( radians( lng ) - radians(1.234) )
+                + sin ( radians(1.234) )
+                  * sin( radians( lat ) )
+            )
+          ) AS origin_distance,
+          (
+            3959 * acos (
+                cos ( radians(1.234) )
+                * cos( radians( lat ) )
+                * cos( radians( lng ) - radians(1.234) )
+                + sin ( radians(1.234) )
+                  * sin( radians( lat ) )
+            )
+          ) AS dest_distance
+FROM Requests
+HAVING
+  (origin_distance < 1 OR OriginName=1.234)
+  AND (dest_distance < 1 OR DestinationName=1.234)
+  AND DATE(StartDateTime)=1.234;
