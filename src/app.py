@@ -227,6 +227,7 @@ def request_add():
     req = RideRequest(
         {
             "user_id": session["user"]["id"],
+            "title": "Ride Request",
             "start_date": request.form["date"],
             "end_date": request.form["date"],
             "start_time": request.form["start_time"],

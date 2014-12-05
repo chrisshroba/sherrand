@@ -163,7 +163,7 @@ class RideRequest():
                 self.origin["lng"],
                 self.destination["name"],
                 self.destination["lat"],
-                self.destination["lng"],
+                self.destination["lng"]
             )
         )
         db.commit()
