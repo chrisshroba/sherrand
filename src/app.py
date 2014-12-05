@@ -20,11 +20,6 @@ def is_public(fn):
 
 @app.route('/')
 def root():
-    # db = get_db()
-    # cur = db.cursor()
-    # cur.execute("SELECT * FROM sayings")
-    # sayings = list(cur.fetchall())
-    # return sayings[randint(0, len(sayings) - 1)]
     if session["user"]:
         return redirect("/home")
     return redirect("/login")
@@ -33,11 +28,12 @@ def root():
 @is_public
 @app.route("/login", methods=["GET", "POST"])
 def login_page():
-    feedback = session["feedback"]
-    feedback_code = session["feedback_code"]
+    feedback = session["feedback"] if "feedback" in session else None
+    feedback_code = session["feedback_code"] if "feedback_code" in session else None
     session["feedback"] = None
     session["feedback_code"] = None
     return render_template("login.html", simplenav='yes', feedback=feedback, feedback_code=feedback_code)
+
 
 def lookup_user(username, password):
     db = get_db()
