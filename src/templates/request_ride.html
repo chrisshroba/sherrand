@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Request a Ride{% endblock %}
+{% block title %}Offer a Ride{% endblock %}
 {% block content %}
 <div class="contentbox">
     <div class="instruction"> Please fill out the ride detail</div>
@@ -12,7 +12,7 @@
     {% else %}
         <p></p>
     {% endif %}
-    <form action="{{ url_for('login') }}"method="post" action="index.html">
+    <form method="post" action="/api/requests">
         <p>
             <div class="input-group">
                 <span class="input-group-addon">Date</span>
@@ -25,7 +25,6 @@
                 <span class="input-group-addon">To</span>
                 <input class="form-control" id="ride-start-time" type="time" name="end_time">
             </div>
-        </p>
         </p>
         <p>
             <div class="input-group">

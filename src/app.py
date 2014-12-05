@@ -79,8 +79,6 @@ def logout():
 @is_public
 @app.route("/home", methods=["GET"])
 def home_page():
-    arr = ["1", "2"]
-    # sessions["events"] = arr#= lookup_events()
     return render_template("home.html")
 
 @is_public
@@ -138,86 +136,133 @@ def offer_ride():
     return render_template('offer_ride.html')
 
 
-@app.route('/api/requests', methods=['GET'])
-def request_get_all():
-    return jsonify({"request_list": RideRequest.get_all()})
+# @app.route('/api/requests', methods=['GET'])
+# def request_get_all():
+#     return jsonify({"request_list": RideRequest.get_all()})
 
 
-@app.route('/api/requests/<int:request_id>', methods=['GET'])
-def request_get_with_id(request_id):
-    return jsonify(RideRequest.get_with_id(request_id))
+# @app.route('/api/requests/<int:request_id>', methods=['GET'])
+# def request_get_with_id(request_id):
+#     return jsonify(RideRequest.get_with_id(request_id))
 
 
-@app.route('/api/requests/<int:request_id>', methods=['PUT'])
-def request_update(request_id):
-    j = request.get_json()
-    try:
-        validate(j, RideRequest.schema)
-    except ValidationError as e:
-        return message_response(400, "Malformed JSON request: " + e.message)
-    new_request = RideRequest(j)
-    new_request.id = request_id
-    new_request.update()
-    return message_response(200, "Successfully updated request!")
+# @app.route('/api/requests/<int:request_id>', methods=['PUT'])
+# def request_update(request_id):
+#     j = request.get_json()
+#     try:
+#         validate(j, RideRequest.schema)
+#     except ValidationError as e:
+#         return message_response(400, "Malformed JSON request: " + e.message)
+#     new_request = RideRequest(j)
+#     new_request.id = request_id
+#     new_request.update()
+#     return message_response(200, "Successfully updated request!")
 
 
-@app.route('/api/requests/<int:request_id>', methods=['DELETE'])
-def request_delete(request_id):
-    RideRequest.delete_with_id(request_id)
-    return message_response(200, "Successfully deleted request!")
+# @app.route('/api/requests/<int:request_id>', methods=['DELETE'])
+# def request_delete(request_id):
+#     RideRequest.delete_with_id(request_id)
+#     return message_response(200, "Successfully deleted request!")
 
 
 @app.route('/api/requests', methods=['POST'])
 def request_add():
-    j = request.get_json()
-    try:
-        validate(j, RideRequest.schema)
-    except ValidationError as e:
-        return message_response(400, "Malformed JSON request: " + e.message)
-    new_request = RideRequest(j)
-    new_request.insert()
-    return message_response(200, "Successfully added request!")
+    user_id = session["user"]["id"]
+    date = request.form["date"]
+    start_time = request.form["start_time"]
+    end_time = request.form["end_time"]
+    origin = request.form["origin"]
+    destination = request.form["destination"]
+
+    db = get_db()
+    cur = db.cursor()
+    q = """
+        INSERT INTO Requests (user_id, date, start_time, end_time, origin_name, dest_name)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        """
+    cur.execute(q, (user_id, date, start_time, end_time, origin, destination))
+
+    # RideOffer({
+    #     "start_time": request.form["start_time"]
+    #     })
+    q = "SELECT * FROM Requests"
+    cur.execute(q)
+    res = cur.fetchall()
+    db.commit()
+
+    if len(res):
+        session["ride"] = None
+    else:
+        session["ride"] = res[len(res)-1];
+
+    return redirect("/confirmation")
+
+@app.route('/confirmation')
+def confirmation():
+    return render_template('confirmation.html')
 
 
-@app.route('/api/offers', methods=['GET'])
-def offer_get_all():
-    return jsonify({"offer_list": RideOffer.get_all()})
+# @app.route('/api/offers', methods=['GET'])
+# def offer_get_all():
+#     return jsonify({"offer_list": RideOffer.get_all()})
 
 
 @app.route('/api/offers/<int:offer_id>', methods=['GET'])
 def offer_get_with_id(offer_id):
-    return jsonify(RideOffer.get_with_id(offer_id))
+    # return jsonify(RideOffer.get_with_id(offer_id))
+    return render_template('ride_info.html')
 
 
-@app.route('/api/offers/<int:offer_id>', methods=['PUT'])
-def offer_update(offer_id):
-    j = request.get_json()
-    try:
-        validate(j, RideOffer.schema)
-    except ValidationError as e:
-        return message_response(400, "Malformed JSON request: " + e.message)
-    new_offer = RideOffer(j)
-    new_offer.id = offer_id
-    new_offer.update()
-    return message_response(200, "Successfully updated offer!")
+# @app.route('/api/offers/<int:offer_id>', methods=['PUT'])
+# def offer_update(offer_id):
+#     j = request.get_json()
+#     try:
+#         validate(j, RideOffer.schema)
+#     except ValidationError as e:
+#         return message_response(400, "Malformed JSON request: " + e.message)
+#     new_offer = RideOffer(j)
+#     new_offer.id = offer_id
+#     new_offer.update()
+#     return message_response(200, "Successfully updated offer!")
 
 
-@app.route('/api/offers/<int:offer_id>', methods=['DELETE'])
-def offer_delete(offer_id):
-    RideOffer.delete_with_id(offer_id)
-    return message_response(200, "Successfully deleted offer!")
+# @app.route('/api/offers/<int:offer_id>', methods=['DELETE'])
+# def offer_delete(offer_id):
+#     RideOffer.delete_with_id(offer_id)
+#     return message_response(200, "Successfully deleted offer!")
 
 
 @app.route('/api/offers', methods=['POST'])
 def offer_add():
-    j = request.get_json()
-    try:
-        validate(j, RideOffer.schema)
-    except ValidationError as e:
-        return message_response(400, "Malformed JSON request: " + e.message)
-    new_offer = RideOffer(j)
-    new_offer.insert()
-    return message_response(200, "Successfully added offer!")
+    title = request.form["title"]
+    user_id = session["user"]["id"]
+    date = request.form["date"]
+    start_time = request.form["start_time"]
+    end_time = request.form["end_time"]
+    origin = request.form["origin"]
+    destination = request.form["destination"]
+    description = request.form["description"]
+
+    db = get_db()
+    cur = db.cursor()
+    q = """
+        INSERT INTO Offers (title, user_id, date, start_time, end_time, origin_name, dest_name, description)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        """
+    cur.execute(q, (title, user_id, date, start_time, end_time, origin, destination, description))
+
+    q = "SELECT * FROM Offers"
+    cur.execute(q)
+    res = cur.fetchall()
+
+    db.commit()
+
+    if len(res) == 0:
+        session["ride"] = res[len(res)-1];
+    else:
+        session["ride"] = None
+
+    return redirect("/ride")
 
 @app.before_request
 def before_request():
@@ -233,9 +278,12 @@ def lookup_events():
     q = "SELECT * FROM Passangers, Rides, Offers WHERE Passangers.user_id = %s AND Passangers.ride_id = Rides.Id AND Rides.offer_id = Offers.Id"
     cur.execute(q, (session.user.Id))
     results = cur.fetchall()
-    # results = [dict(id=item[0], username=item[1], password=item[2], first_name=item[3], last_name=item[4], phone=item[5], email=item[6], score=item[7], photo=item[8], d_rating=item[9], p_rating=item[10]) for item in cur.fetchall()]
+    cur.commit()
+
     if len(results) == 0:
         return None
+    else:
+        None
     return results
 
 
