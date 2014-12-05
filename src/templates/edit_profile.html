@@ -6,7 +6,7 @@
     <form method="post" action="/api/edit_profile">
         <p><input class="form-control" type="text" name="first_name" value="{{ session.user.first_name }}"></p>
         <p><input class="form-control" type="text" name="last_name" value="{{ session.user.last_name }}"></p>
-        <p><input class="form-control" type="password" name="password" placeholder="Fill in password"></p>
+        <p><input class="form-control" type="password" name="password" placeholder="Fill in password" required></p>
         <!-- <p><input class="form-control" type="password" name="password_confirm" placeholder="Confirm password"></p> -->
         <p><input class="form-control" type="text" name="phone" value="{{ session.user.phone }}"></p>
         <p><input class="form-control" type="email" name="email"  value="{{ session.user.email }}"></p>

@@ -7,11 +7,16 @@
         <a href="/offer" class="btn btn-warning">Offer</a>
     </div>
     <div class="instruction"> Scheduled Events</div>
-    {% if session.events %}
-        {% for i in session.events %}
+    {% if session.offers %}
+        {% for event in session.offers %}
             <div class="well well-lg">
-                <a href="#" class="close" data-dismiss="alert">&times;</a>
-                <h3>{{ events[i][1] }}</h3>
+                <h3>{{ event[1] }}</h3>
+                <h5>Seats: {{ event[2] }} / {{ event[3] }} available</h5>
+                <h5>{{ event[5] }}</h5>
+                <br>
+                <div id="button-group">
+                    <a class="btn btn-warning" href="/offers/{{ event[0] }}">More</a>
+                </div>
             </div>
 
         {% endfor %}

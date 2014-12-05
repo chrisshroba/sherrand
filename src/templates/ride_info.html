@@ -2,6 +2,15 @@
 {% block title %}Home{% endblock %}  
 {% block content %}
 <div class="contentwapper">
+    {% if feedback %}
+        {% if feedback_code == "warning" %}
+            <div id="feedback" class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert">&times;</a>{{ feedback }}</div>
+        {% elif feedback_code == "success" %}
+            <div id="feedback" class="alert alert-success" role="alert">{{ feedback }}</div>
+        {% endif %}
+    {% else %}
+        <p></p>
+    {% endif %}
     <div class="instruction"> Ride Info</div>
     <div class="well well-lg">
         <h3>{{ offer.title }}</h3>
@@ -11,6 +20,7 @@
     </div>
     <div id="button-group">
         <a class="btn btn-primary" href="/home">Go to Home</a>
+        <!-- <a class="btn btn-success" href="/join_ride/{{ offer.id }}">Join the Ride</a> -->
     </div>
     <form action="" method="post">
         <input type="submit" value="Request SMS Chat" />

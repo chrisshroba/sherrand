@@ -93,7 +93,7 @@ def logout():
 @app.route("/home", methods=["GET"])
 def home_page():
     update_notifications()
-    # session["events"] = lookup_events()
+    session["offers"] = lookup_events() 
     # return str(lookup_events()[0][5])
     return render_template("home.html")
 
@@ -134,8 +134,8 @@ def message_response(code, message):
     response.status_code = code
     return response
 
-@app.route('/ride')
-def ride_info():
+@app.route('/ride/<int:ride_id>')
+def ride_info(ride_id):
     update_notifications()
     return render_template('ride_info.html')
 
@@ -305,6 +305,7 @@ def offer_delete(offer_id):
     return message_response(200, "Successfully deleted offer!")
 
 
+
 @app.route('/api/offers', methods=['POST'])
 def offer_add():
     req = RideOffer(
@@ -344,7 +345,7 @@ def before_request():
 def lookup_events():
     db = get_db()
     cur = db.cursor()
-    q = "SELECT * FROM Offers "
+    q = "SELECT * FROM Offers"
     cur.execute(q)
     results = cur.fetchall()
     db.commit()
