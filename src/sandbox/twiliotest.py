@@ -28,6 +28,9 @@ def get_random_number():
     return numbers[randint(0, len(numbers)-1)]
 
 def setup_number_proxy(num1, num2):
+    num1 = num1.replace("-", "")
+    num2 = num2.replace("-", "")
+
     ret_num = None
     for number in numbers:
         if num1 not in number_maps[number] and num2 not in number_maps[number]:

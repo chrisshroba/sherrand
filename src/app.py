@@ -284,7 +284,7 @@ def offer_get_with_id_post(offer_id):
     requester_phone = cur.fetchall()[0][0]
 
     url = "http://shroba.io:4555/setupProxy?num1=%s&num2=%s" % (requester_phone, driver_phone)
-    make_proxy = urllib2.urlopen(url).open()
+    make_proxy = urllib2.urlopen(url).read()
 
     return render_template('ride_info.html', offer=offer)
 
