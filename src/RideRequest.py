@@ -166,7 +166,8 @@ class RideRequest():
                 self.destination["lng"],
             )
         )
-        db.commit()
+        res = cur.execute("SELECT MAX(Id) FROM Requests")
+        return 100
 
     def update(self):
         db = get_db()

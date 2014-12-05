@@ -4,10 +4,9 @@
 <div class="contentwapper">
     <div class="instruction"> Requst Confirmation</div>
     <div class="well well-lg">
-        <p>Title: {{ session.ride[1] }}</p>
-        <p>Date: {{ session.ride[5] }}</p>
-        <p>Time: from {{ session.ride[6] }} to {{ session.ride[7] }}</p>
-        <p>Availbility: {{ session.ride[4] }} / {{ session.ride[3] }} </p>
+        <p>Title: {{ ride.title }}</p>
+        <p>Date: {{ ride.start_date }}</p>
+        <p>Time: from {{ ride.start_time }} to {{ ride.end_time }}</p>
         <!-- <p>Origin: {{ session.ride[] }}</p>
         <p>Title: {{ session.ride[1] }}</p>
         <p>Title: {{ session.ride[1] }}</p>
