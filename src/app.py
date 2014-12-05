@@ -267,7 +267,7 @@ def confirmation(request_id):
 @app.route('/offers/<int:offer_id>', methods=['GET'])
 def offer_get_with_id(offer_id):
     update_notifications()
-    offer = RideOffer.get_with_id(offer_id)
+    offer = RideOffer.get_with_id_and_name(offer_id)
     return render_template('ride_info.html', offer=offer)
 
 

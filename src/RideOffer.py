@@ -120,6 +120,39 @@ class RideOffer():
         return RideOffer.sql_response_to_json(cur.fetchall()[0])
 
     @staticmethod
+    def get_with_id_and_name(offer_id):
+        db = get_db()
+        cur = db.cursor()
+        cur.execute(
+            """
+            SELECT
+                Offers.Id,
+                Offers.Title,
+                Offers.User,
+                Offers.MaxSeats,
+                Offers.OpenSeats,
+                Offers.StartDateTime,
+                Offers.EndDateTime,
+                Offers.OriginName,
+                Offers.OriginLat,
+                Offers.OriginLng,
+                Offers.DestinationName,
+                Offers.DestinationLat,
+                Offers.DestinationLng,
+                Users.FirstName,
+                Users.LastName
+            FROM Offers
+            JOIN Users
+            ON Users.Id=Offers.User
+            WHERE Id=%s
+            """, [offer_id])
+        fetch = cur.fetchall()[0]
+        resp = RideOffer.sql_response_to_json(fetch)
+        resp["first_name"] = fetch[13]
+        resp["last_name"] = fetch[14]
+        return
+
+    @staticmethod
     def sql_response_to_json(s):
         return {
             "id": s[0],

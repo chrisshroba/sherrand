@@ -5,6 +5,7 @@
     <div class="instruction"> Ride Info</div>
     <div class="well well-lg">
         <h3>{{ offer.title }}</h3>
+        <p>Offered by: {{offer.first_name}} {{offer.last_name}}</p>
         <p>From {{ offer.origin.name }} to {{ offer.destination.name }}</p>
         <p>Seats: {{ offer.max_seats }} / {{ offer.open_seats }} available</p>
                 <div id="map-canvas"></div>
